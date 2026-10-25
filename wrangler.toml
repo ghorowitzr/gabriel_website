@@ -12,6 +12,15 @@ binding = "ASSETS"
 run_worker_first = ["/api/*", "/confirm/*", "/s/*", "/unsubscribe/*", "/_blob/*"]
 
 # Every 10 minutes: publish scheduled posts and finish any unsent notification emails.
+# Your domain (it lives in this Cloudflare account, so this connects it automatically on deploy).
+[[routes]]
+pattern = "gabrielhorowitz.com"
+custom_domain = true
+
+[[routes]]
+pattern = "www.gabrielhorowitz.com"
+custom_domain = true
+
 [triggers]
 crons = ["*/10 * * * *"]
 
@@ -19,18 +28,18 @@ crons = ["*/10 * * * *"]
 [[d1_databases]]
 binding = "DB"
 database_name = "gabriel-site-db"
-database_id = "00000000-0000-0000-0000-000000000000"   # `npm run setup` replaces this
+database_id = "d1fe1efe-ce28-44cf-8c55-9f561e51aff7"
 migrations_dir = "migrations"
 
 # Uploaded images.
 [[kv_namespaces]]
 binding = "MEDIA"
-id = "00000000000000000000000000000000"                   # `npm run setup` replaces this
+id = "308e47ef22364a05b68c0f363b555a2a"
 
 # Public settings. Secrets (password, email key) are NOT stored here.
 [vars]
-SITE_URL = ""          # e.g. "https://yourname.com"  (used for links inside emails)
+SITE_URL = "https://gabrielhorowitz.com"          # e.g. "https://yourname.com"  (used for links inside emails)
 FROM_EMAIL = ""        # e.g. "Gabriel Horowitz <hello@yourname.com>"  (must be on a domain you verified with your email provider)
 REPLY_TO = ""          # optional: where replies go, e.g. "you@gmail.com"
-MAILING_ADDRESS = ""   # optional but recommended: a postal address shown in email footers
+MAILING_ADDRESS = "ghorowitzr@gmail.com"   # optional but recommended: a postal address shown in email footers
 MAX_BATCHES = "2"      # emails go out 100 at a time; this many batches per 10-minute run (free plan: keep at 2)
