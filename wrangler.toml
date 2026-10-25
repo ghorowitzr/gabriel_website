@@ -1,5 +1,6 @@
 name = "gabriel-site"
 main = "src/worker.js"
+workers_dev = true
 compatibility_date = "2025-09-01"
 
 # The site itself (index.html and images that shipped with it).
