@@ -1,0 +1,35 @@
+name = "gabriel-site"
+main = "src/worker.js"
+compatibility_date = "2025-09-01"
+
+# The site itself (index.html and images that shipped with it).
+# Static files are served straight from Cloudflare's network (free and unlimited);
+# only the paths below run our code.
+[assets]
+directory = "./public"
+binding = "ASSETS"
+run_worker_first = ["/api/*", "/confirm/*", "/s/*", "/unsubscribe/*", "/_blob/*"]
+
+# Every 10 minutes: publish scheduled posts and finish any unsent notification emails.
+[triggers]
+crons = ["*/10 * * * *"]
+
+# Posts, subscribers, likes, comments, drafts.
+[[d1_databases]]
+binding = "DB"
+database_name = "gabriel-site-db"
+database_id = "00000000-0000-0000-0000-000000000000"   # `npm run setup` replaces this
+migrations_dir = "migrations"
+
+# Uploaded images.
+[[kv_namespaces]]
+binding = "MEDIA"
+id = "00000000000000000000000000000000"                   # `npm run setup` replaces this
+
+# Public settings. Secrets (password, email key) are NOT stored here.
+[vars]
+SITE_URL = ""          # e.g. "https://yourname.com"  (used for links inside emails)
+FROM_EMAIL = ""        # e.g. "Gabriel Horowitz <hello@yourname.com>"  (must be on a domain you verified with your email provider)
+REPLY_TO = ""          # optional: where replies go, e.g. "you@gmail.com"
+MAILING_ADDRESS = ""   # optional but recommended: a postal address shown in email footers
+MAX_BATCHES = "2"      # emails go out 100 at a time; this many batches per 10-minute run (free plan: keep at 2)

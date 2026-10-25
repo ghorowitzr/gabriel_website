@@ -1,0 +1,4 @@
+EDIT_PASSWORD=pick-a-test-password
+SESSION_SECRET=any-long-random-string-for-local-testing
+EMAIL_MODE=log
+SITE_URL=http://127.0.0.1:8787
