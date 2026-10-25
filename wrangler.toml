@@ -41,5 +41,5 @@ id = "308e47ef22364a05b68c0f363b555a2a"
 SITE_URL = "https://gabrielhorowitz.com"          # e.g. "https://yourname.com"  (used for links inside emails)
 FROM_EMAIL = ""        # e.g. "Gabriel Horowitz <hello@yourname.com>"  (must be on a domain you verified with your email provider)
 REPLY_TO = ""          # optional: where replies go, e.g. "you@gmail.com"
-MAILING_ADDRESS = "ghorowitzr@gmail.com"   # optional but recommended: a postal address shown in email footers
+MAILING_ADDRESS = "Gabriel Horowitz, University of California, Berkeley, CA 94720"   # optional but recommended: a postal address shown in email footers
 MAX_BATCHES = "2"      # emails go out 100 at a time; this many batches per 10-minute run (free plan: keep at 2)
