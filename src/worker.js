@@ -1,6 +1,5 @@
 import { isAdmin, login, logout } from "./auth.js";
 import { loadSite, viewFor, validateSite, saveSite, postTime } from "./site.js";
-import { sendBatch, confirmEmail } from "./email.js";
 import { runNotifications } from "./notify.js";
 import {
   json, fail, html, esc, now, randHex, cookies, cookie, isHttps, ipKey, rateAllow, validEmail,
@@ -186,32 +185,19 @@ async function subscribe(request, env, url) {
   if (!validEmail(email)) return fail(400, "bad_email", "Enter a valid email address.");
   if (!(await rateAllow(env, await ipKey(env, request, "sub"), 6, 3600))) return fail(429, "slow_down", "Too many attempts. Try again in a little while.");
 
+  // No confirmation email: entering an address subscribes it straight away.
+  // Only a brand-new subscriber gets the "I'm a subscriber" cookie. Handing it out for an address that
+  // already exists would let anyone type in someone else's email and take over their subscription.
   const t = now();
-  const base = (env.SITE_URL || url.origin).replace(/\/+$/, "");
-  let row = await env.DB.prepare("SELECT id, token, status, confirm_sent_at FROM subscribers WHERE email = ?").bind(email).first();
-  let sendConfirm = false;
+  const row = await env.DB.prepare("SELECT id, status FROM subscribers WHERE email = ?").bind(email).first();
   if (!row) {
     const id = randHex(8), token = randHex(24);
-    await env.DB.prepare("INSERT INTO subscribers (id, email, token, status, created_at, confirm_sent_at) VALUES (?, ?, ?, 'pending', ?, ?)").bind(id, email, token, t, t).run();
-    row = { id, token };
-    sendConfirm = true;
-  } else if (row.status === "pending" && (row.confirm_sent_at || 0) < t - 5 * 60 * 1000) {
-    sendConfirm = true;
-  } else if (row.status === "unsubscribed") {
-    await env.DB.prepare("UPDATE subscribers SET status = 'pending', confirm_sent_at = ? WHERE id = ?").bind(t, row.id).run();
-    sendConfirm = true;
+    await env.DB.prepare("INSERT INTO subscribers (id, email, token, status, created_at, confirmed_at) VALUES (?, ?, ?, 'confirmed', ?, ?)").bind(id, email, token, t, t).run();
+    return json({ ok: true }, 200, { "set-cookie": cookie(SUB_COOKIE, token, { maxAge: 365 * 86400, secure: isHttps(request) }) });
   }
-  // Someone already confirmed (or asked in the last 5 minutes) gets the same reply, so this form can't be used to probe who's subscribed.
-  if (sendConfirm) {
-    const { site } = await loadSite(env);
-    const msg = confirmEmail({ siteTitle: site.site?.title || "the site", confirmUrl: `${base}/confirm/${row.token}` });
-    try {
-      await sendBatch(env, [{ to: email, ...msg }]);
-      await env.DB.prepare("UPDATE subscribers SET confirm_sent_at = ? WHERE id = ?").bind(t, row.id).run();
-    } catch (e) {
-      console.error("confirm email failed", e.message);
-      return fail(503, "email_unavailable", "Subscriptions are temporarily unavailable. Please try again later.");
-    }
+  if (row.status !== "confirmed") {
+    // Includes people who unsubscribed earlier and are signing up again, and anyone left waiting from the old flow.
+    await env.DB.prepare("UPDATE subscribers SET status = 'confirmed', confirmed_at = ? WHERE id = ?").bind(t, row.id).run();
   }
   return json({ ok: true });
 }

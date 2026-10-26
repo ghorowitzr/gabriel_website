@@ -729,7 +729,7 @@ async function subscribe(email,msgEl){
   email=String(email||"").trim();const say=(t,c)=>{if(msgEl){msgEl.textContent=t;msgEl.className="submsg "+(c||"");}};
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){say("Enter a valid email address.","err");return false;}
   say("Subscribing…");
-  try{await api("POST","/api/subscribe",{email});say("Almost done. Check your inbox and click the link to confirm.","ok");return true;}
+  try{await api("POST","/api/subscribe",{email});say("You're subscribed. New posts will land in your inbox.","ok");return true;}
   catch(e){say(e.message||"Couldn't subscribe. Try again.","err");return false;}
 }
 
@@ -1307,7 +1307,7 @@ document.addEventListener("submit",e=>{const f=e.target.closest("[data-form]");i
   if(f.dataset.form==="comment")postComment(f.dataset.id,$("#c-text").value);});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"){if($("#dlg"))return;if($(".reader")&&!E){location.hash="t-"+curTab().slug;return;}if($(".preview-wrap")){$(".preview-wrap").remove();return;}if($(".drawer")){$(".drawer").remove();return;}}
   if((e.key==="Enter"||e.key===" ")&&e.target.matches('span.b[data-act="sub-dialog"]')){e.preventDefault();subDialog();}});
-function subDialog(){if(C.subscribed){toast("You're already subscribed.");return;}dialog({title:"Subscribe to "+V().site.title,fields:[{k:"email",l:"Email",t:"email",v:"",ph:"you@example.com"}],ok:"Subscribe",onOk:v=>{subscribe(v.email,null).then(ok=>{if(ok)toast("Check your inbox to confirm.",5000);});}});}
+function subDialog(){if(C.subscribed){toast("You're already subscribed.");return;}dialog({title:"Subscribe to "+V().site.title,fields:[{k:"email",l:"Email",t:"email",v:"",ph:"you@example.com"}],ok:"Subscribe",onOk:v=>{subscribe(v.email,null).then(ok=>{if(ok)toast("You're subscribed. Welcome!",5000);});}});}
 
 /* ---------- social writes ---------- */
 async function loadSocial(){try{const x=await api("GET","/api/social");cache.likes=x.likes||{};cache.mine=x.mine||{};cache.polls=x.polls||{};cache.comments=x.comments||{};}catch(_){}}

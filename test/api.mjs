@@ -81,30 +81,31 @@ ok(/HttpOnly/i.test(r.headers.get("set-cookie")), "session cookie is HttpOnly");
 r = await owner.get("/api/site");
 ok(r.data.me.admin === true, "server recognizes the owner");
 
-console.log("\nSubscribing (double opt-in)");
+console.log("\nSubscribing (no confirmation step)");
 r = await anon.post("/api/subscribe", { email: "not-an-email" });
 ok(r.status === 400, "invalid email is rejected", r.status);
 r = await anon.post("/api/subscribe", { email: "bot@example.com", hp: "gotcha" });
-ok(r.status === 200 && outbox("to_addr='bot@example.com'").length === 0, "honeypot field: silently ignored, no email");
-for (const e of ["reader@example.com", "late@example.com", "pending@example.com", "leaver@example.com"]) {
-  r = await anon.post("/api/subscribe", { email: e });
+ok(r.status === 200 && sql(`SELECT 1 FROM subscribers WHERE email='bot@example.com'`).length === 0, "honeypot field: silently ignored, nobody added");
+const firstVisit = new Client();
+r = await firstVisit.post("/api/subscribe", { email: "reader@example.com" });
+ok(r.status === 200, "subscribe reader@example.com", r.status);
+ok(!!firstVisit.jar.sn_sub, "a brand-new subscriber is recognised on this device straight away");
+for (const e of ["late@example.com", "leaver@example.com"]) {
+  r = await new Client().post("/api/subscribe", { email: e });
   ok(r.status === 200, `subscribe ${e}`, r.status);
 }
-const confirmMails = outbox("subject LIKE 'Confirm your subscription%'");
-ok(confirmMails.length === 4, "one confirmation email per address", confirmMails.length);
-r = await anon.post("/api/subscribe", { email: "pending@example.com" });
-ok(outbox("subject LIKE 'Confirm your subscription%'").length === 4, "re-submitting within 5 minutes doesn't send another email");
+ok(outbox("1=1").length === 0, "no confirmation emails are sent");
 const tokens = {};
-for (const m of confirmMails) tokens[m.to_addr] = /\/confirm\/([0-9a-f]+)/.exec(linkIn(m, /https?:\/\/\S+\/confirm\/[0-9a-f]+/))[1];
-r = await new Client().get("/confirm/" + tokens["reader@example.com"]);
-ok(r.status === 302 && /s=confirmed/.test(r.headers.get("location")), "confirm link redirects");
+for (const row of sql("SELECT email, token, status FROM subscribers")) { tokens[row.email] = row.token; ok(row.status === "confirmed", `${row.email} is subscribed immediately`, row.status); }
+const stranger = new Client();
+r = await stranger.post("/api/subscribe", { email: "reader@example.com" });
+ok(r.status === 200 && !stranger.jar.sn_sub, "typing in an existing address does not hand out that person's login cookie");
+ok(sql(`SELECT COUNT(*) AS c FROM subscribers WHERE email='reader@example.com'`)[0].c === 1, "no duplicate subscriber");
 reader.jar.sn_sub = tokens["reader@example.com"];
 r = await reader.get("/api/site");
-ok(r.data.me.subscribed === true, "confirmed subscriber is recognized by the cookie");
-await new Client().get("/confirm/" + tokens["leaver@example.com"]);
-await new Client().get("/confirm/" + tokens["late@example.com"]);
+ok(r.data.me.subscribed === true, "subscriber is recognized by the cookie");
 r = await owner.get("/api/subscribers");
-ok(r.data.counts.confirmed === 3 && r.data.counts.pending === 1, "owner sees 3 confirmed, 1 pending", r.data.counts);
+ok(r.data.counts.confirmed === 3 && r.data.counts.pending === 0, "owner sees 3 subscribers", r.data.counts);
 
 console.log("\nPublishing a post emails confirmed subscribers once");
 const mk = (over) => ({
@@ -120,9 +121,8 @@ ok(r.status === 200, "owner saves the site with a new post", r);
 version = r.data.version;
 await sleep(2500);
 let mails = outbox("subject = 'Fresh post'");
-ok(mails.length === 3, "3 confirmed subscribers emailed, pending one not", mails.map((m) => m.to_addr));
-ok(!mails.some((m) => m.to_addr === "pending@example.com"), "unconfirmed address got nothing");
-ok(outbox("subject NOT LIKE 'Confirm%' AND subject != 'Fresh post'").length === 0, "none of the 8 starting posts were emailed");
+ok(mails.length === 3, "all 3 subscribers emailed", mails.map((m) => m.to_addr));
+ok(outbox("subject != 'Fresh post'").length === 0, "none of the 8 starting posts were emailed");
 const mailBody = JSON.parse(mails[0].body);
 ok(/\/unsubscribe\/[0-9a-f]+/.test(mailBody.text) && mailBody.headers["List-Unsubscribe-Post"] === "List-Unsubscribe=One-Click", "email has unsubscribe link and one-click header");
 ok(/\/s\/[0-9a-f]+\/fresh-post/.test(mailBody.text), "email links straight to the post");
