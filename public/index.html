@@ -156,6 +156,7 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:400;margin:0;text-wrap:balanc
 .post .sub{font-family:var(--read);font-size:21px;color:var(--muted);margin:0 0 26px;line-height:1.45}
 .byline{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.04em;flex-wrap:wrap}
 .byline b{color:var(--fg);font-weight:500;font-family:var(--sans);font-size:14px;letter-spacing:0}
+.av img{width:100%;height:100%;object-fit:cover;display:block}.av.photo{overflow:hidden;background:var(--raise)}
 .av{width:36px;height:36px;border-radius:50%;border:1px solid var(--line-strong);display:grid;place-items:center;font-family:var(--display);font-size:15px;background:var(--raise)}
 .social{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border-block:1px solid var(--line);padding-block:10px;margin:22px 0 0}
 .social .l{display:flex;gap:6px}
@@ -387,6 +388,7 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:400;margin:0;text-wrap:balanc
 .paper .gal-ft button{background:var(--glass)}
 .paper .blk-portrait canvas{background:radial-gradient(circle at 50% 32%,#161c33,#05060b 78%);border-radius:6px}
 .paper .prose .tc-orange{color:#e8590c}.paper .prose .tc-red{color:#c92a2a}.paper .prose .tc-green{color:#2b8a3e}.paper .prose .tc-blue{color:#1c5bc4}.paper .prose .tc-purple{color:#7048c0}.paper .prose .tc-grey{color:#808287}
+.prose .fs-sm{font-size:15px}.prose .fs-lg{font-size:24px}.prose .fs-xl{font-size:clamp(26px,5vw,32px)}.prose .fs-xxl{font-size:clamp(30px,7vw,44px);line-height:1.3}
 .prose .tc-orange{color:#ff8a4c}.prose .tc-red{color:#ff8787}.prose .tc-green{color:#8ce99a}.prose .tc-blue{color:#91b4ff}.prose .tc-purple{color:#c6a8ff}.prose .tc-grey{color:#a5a8b0}
 .ebar,.pvbar{--fg:#f3f4f8;--muted:#9a9fb3;--line-strong:rgba(220,228,255,.34);--onfg:#05060b;--accent:#cfe0ff;color:#f3f4f8}
 .btools{--muted:#9a9fb3;--fg:#f3f4f8}
@@ -530,6 +532,7 @@ const ls={get:k=>{try{return localStorage.getItem(k);}catch(_){return null;}},se
 const fmtDate=d=>{const t=new Date(d);return isNaN(t)?"":t.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}).toUpperCase();};
 const textOf=h=>{const d=document.createElement("div");d.innerHTML=h||"";return d.textContent||"";};
 const words=h=>textOf(h).split(/\s+/).filter(Boolean).length;
+const authorAv=n=>{const im=safeMedia(S.site.loader&&S.site.loader.image);return im?`<span class="av photo"><img src="${esc(im)}" alt=""></span>`:`<span class="av">${esc(initials(n))}</span>`;};
 const initials=n=>String(n||"").split(/\s+/).map(w=>w.replace(/[^A-Za-z]/g,"")[0]).filter(Boolean).slice(-2).join("").toUpperCase()||"✦";
 const ago=t=>{const s=(Date.now()-t)/1000;if(s<60)return"just now";if(s<3600)return Math.floor(s/60)+"m";if(s<86400)return Math.floor(s/3600)+"h";return new Date(t).toLocaleDateString("en-US",{month:"short",day:"numeric"});};
 
@@ -580,7 +583,7 @@ function clean(html){
     [...c.attributes].forEach(a=>{if(!ALLOW[tag].includes(a.name))c.removeAttribute(a.name);});
     if(c.hasAttribute("href")){const u=safeUrl(c.getAttribute("href"));u?c.setAttribute("href",u):c.removeAttribute("href");}
     if(c.hasAttribute("src")){const u=safeMedia(c.getAttribute("src"));if(!u){c.remove();return;}c.setAttribute("src",u);}
-    if(c.hasAttribute("class")){const cl=c.getAttribute("class");const ok={BLOCKQUOTE:/^pull$/,FIGURE:/^w-(img|video|gallery)$/,DIV:WIDGET,SUP:/^fn$/,SPAN:/^tc-(orange|red|green|blue|purple|grey)$/}[tag];if(!ok||!ok.test(cl))c.removeAttribute("class");}
+    if(c.hasAttribute("class")){const cl=c.getAttribute("class");const ok={BLOCKQUOTE:/^pull$/,FIGURE:/^w-(img|video|gallery)$/,DIV:WIDGET,SUP:/^fn$/,SPAN:/^(tc-(orange|red|green|blue|purple|grey)|fs-(sm|lg|xl|xxl))$/}[tag];if(!ok||!ok.test(cl))c.removeAttribute("class");}
     if(tag==="FIGURE"){if(c.hasAttribute("data-w")&&!/^\d{1,3}$/.test(c.getAttribute("data-w")))c.removeAttribute("data-w");if(c.hasAttribute("data-al")&&!/^(left|center|right)$/.test(c.getAttribute("data-al")))c.removeAttribute("data-al");if(c.hasAttribute("data-mode")&&!/^(inline|wrap|front|behind)$/.test(c.getAttribute("data-mode")))c.removeAttribute("data-mode");if(c.hasAttribute("data-x")&&!/^-?\d{1,3}(\.\d)?$/.test(c.getAttribute("data-x")))c.removeAttribute("data-x");if(c.hasAttribute("data-y")&&!/^\d{1,5}$/.test(c.getAttribute("data-y")))c.removeAttribute("data-y");}
     if(tag==="DIV"){c.innerHTML="";return;}
     if(tag==="SUP"&&c.getAttribute("class")==="fn"){c.textContent="*";return;}
@@ -975,7 +978,7 @@ function postView(p,preview,inReader){
   const gate=!canSee&&gated?`<div class="gate"><h3>Keep reading</h3><p>The rest of this post is for subscribers.</p><button class="btn primary" data-act="sub-dialog">Subscribe to read</button></div>`:"";
   return `<article class="post paper" style="${postVars(p)}">${inReader?`<a class="closex" href="#t-${esc(tab.slug)}" aria-label="Close">✕</a>`:""}<a class="back" href="#t-${esc(tab.slug)}">← ${inReader?"Close":esc(tab.name)}</a>
    <h1>${esc(p.title)}</h1>${p.subtitle?`<p class="sub">${esc(p.subtitle)}</p>`:""}
-   <div class="byline"><span class="av">${esc(initials(author))}</span><span><b>${esc(author)}</b><br><span class="tab">${fmtDate(p.date)} · ${mins} MIN READ</span></span>${p.example?'<span class="badge">EXAMPLE</span>':""}${pt(p)>now()?'<span class="badge sched">SCHEDULED</span>':""}</div>
+   <div class="byline">${authorAv(author)}<span><b>${esc(author)}</b><br><span class="tab">${fmtDate(p.date)} · ${mins} MIN READ</span></span>${p.example?'<span class="badge">EXAMPLE</span>':""}${pt(p)>now()?'<span class="badge sched">SCHEDULED</span>':""}</div>
    ${preview?"":socialBar(p)}
    ${ED()&&!preview&&!L?`<div class="owner-row"><button class="btn sm" data-act="edit-post" data-id="${p.id}">Edit post</button><button class="btn sm" data-act="cover" data-id="${p.id}">Change image</button><span data-delwrap><button class="btn sm danger" data-act="ask-del" data-id="${p.id}">Delete</button></span></div>`:""}
    <div class="prose" id="pbody" style="margin-top:30px">${clean(body)}</div>${gate}
@@ -1106,7 +1109,7 @@ function openEditor(post,isNew){
    <div class="tbar wrap" id="tbar" role="toolbar" aria-label="Formatting">
     <button data-c="undo" title="Undo">↶</button><button data-c="redo" title="Redo">↷</button><span class="sep"></span>
     <select data-c="style" aria-label="Text style" id="e-style"><option value="p">Normal text</option><option value="h2">Heading 1</option><option value="h3">Heading 2</option><option value="h4">Heading 3</option><option value="pre">Code block</option></select><span class="sep"></span>
-    <button data-c="bold" title="Bold (⌘B)"><b>B</b></button><button data-c="italic" title="Italic (⌘I)"><i>I</i></button><button data-c="strikeThrough" title="Strikethrough"><s>S</s></button><button data-c="code" class="tx" title="Inline code">&lt;/&gt;</button><button data-c="link" title="Link (⌘K)">🔗</button><button data-c="color" title="Text color"><span style="border-bottom:3px solid var(--accent);padding:0 3px;font-weight:600">A</span></button><span class="sep"></span>
+    <button data-c="bold" title="Bold (⌘B)"><b>B</b></button><button data-c="italic" title="Italic (⌘I)"><i>I</i></button><button data-c="strikeThrough" title="Strikethrough"><s>S</s></button><button data-c="code" class="tx" title="Inline code">&lt;/&gt;</button><button data-c="link" title="Link (⌘K)">🔗</button><button data-c="color" title="Text color"><span style="border-bottom:3px solid var(--accent);padding:0 3px;font-weight:600">A</span></button><button data-c="size" title="Text size"><span style="font-weight:600">A<span style="font-size:.72em">A</span></span></button><span class="sep"></span>
     <button data-c="image" title="Image">🖼</button><button data-c="gallery" class="tx" title="Image gallery">Gallery</button><button data-c="video" class="tx" title="Video">Video</button><span class="sep"></span>
     <button data-c="quote" title="Quote">❝</button><button data-c="pull" class="tx" title="Pull quote">Pull</button><button data-c="insertUnorderedList" title="Bulleted list">• ≡</button><button data-c="insertOrderedList" title="Numbered list">1. ≡</button><span class="sep"></span>
     <button data-c="hr" title="Divider">—</button><button data-c="button" class="tx" title="Button">Button</button><button data-c="poll" class="tx" title="Poll">Poll</button><button data-c="footnote" class="tx" title="Footnote">Footnote</button><button data-c="embed" class="tx" title="Link card">Embed</button><button data-c="paywall" class="tx" title="Subscribers-only break">Paywall</button><span class="sep"></span>
@@ -1136,6 +1139,29 @@ function blockAncestor(n){const ed=$("#ed");while(n&&n!==ed){if(n.nodeType===1&&
 function syncTB(){if(!E)return;["bold","italic","strikeThrough","insertUnorderedList","insertOrderedList"].forEach(c=>{const b=$(`#tbar [data-c="${c}"]`);let on=false;try{on=document.queryCommandState(c);}catch(_){}b&&b.classList.toggle("on",on);});
   const s=getSelection();const blk=s.rangeCount&&blockAncestor(s.anchorNode);const sel=$("#e-style");if(sel){const t=blk?blk.tagName.toLowerCase():"p";sel.value=["h2","h3","h4","pre"].includes(t)?t:"p";}}
 document.addEventListener("selectionchange",()=>{if(E&&$("#ed")&&$("#ed").contains(getSelection().anchorNode)){saveSel();syncTB();}});
+function unwrapEl(el){const p=el.parentNode;if(!p)return;while(el.firstChild)p.insertBefore(el.firstChild,el);p.removeChild(el);}
+function applySize(sz){
+  restoreSel();const s=getSelection();if(!s.rangeCount||s.isCollapsed){toast("Select some text first.");return;}
+  try{document.execCommand("styleWithCSS",false,false);}catch(_){}
+  document.execCommand("fontSize",false,"7");
+  const ed=$("#ed");const made=$$('font[size="7"]',ed);const spans=[];
+  if(!sz){const rg=s.getRangeAt(0);$$('span[class^="fs-"]',ed).forEach(x=>{if(rg.intersectsNode(x))unwrapEl(x);});}
+  made.forEach(f=>{$$('span[class^="fs-"]',f).forEach(unwrapEl);
+    if(!sz){unwrapEl(f);return;}
+    const sp=document.createElement("span");sp.className="fs-"+sz;while(f.firstChild)sp.appendChild(f.firstChild);f.replaceWith(sp);spans.push(sp);});
+  // tidy: a size span with nothing in it, or two identical ones side by side
+  $$('span[class^="fs-"]',ed).forEach(x=>{if(!x.textContent&&!x.querySelector("img,br"))x.remove();});
+  if(spans.length){const r=document.createRange();r.setStartBefore(spans[0]);r.setEndAfter(spans[spans.length-1]);s.removeAllRanges();s.addRange(r);saveSel();}
+  scheduleSave();updWC();
+}
+// After Enter, a new empty paragraph must start clean: no link, color, size, bold... carried over from the line above.
+function resetNewParagraph(){
+  const s=getSelection();if(!s.rangeCount||!s.isCollapsed)return;const blk=blockAncestor(s.anchorNode);if(!blk)return;
+  if(blk.textContent.replace(/[\u200b\u00a0]/g,"").trim()!=="")return;           // only when the new line is empty
+  if(!blk.querySelector("a,span,b,strong,i,em,u,s,strike,del,code,font,sup"))return;
+  blk.innerHTML="<br>";
+  const r=document.createRange();r.setStart(blk,0);r.collapse(true);s.removeAllRanges();s.addRange(r);saveSel();syncTB();
+}
 async function tbCmd(c,val){
   const ed=$("#ed");
   if(["bold","italic","strikeThrough","insertUnorderedList","insertOrderedList","undo","redo","removeFormat"].includes(c)){restoreSel();document.execCommand(c);if(c==="removeFormat"){document.execCommand("unlink");}scheduleSave();syncTB();updWC();return;}
@@ -1143,6 +1169,10 @@ async function tbCmd(c,val){
   if(c==="quote"||c==="pull"){restoreSel();const s=getSelection();const blk=blockAncestor(s.anchorNode);if(blk&&blk.tagName==="BLOCKQUOTE"&&(c==="quote"?!blk.classList.contains("pull"):blk.classList.contains("pull"))){document.execCommand("formatBlock",false,"<p>");}else{document.execCommand("formatBlock",false,"<blockquote>");const b2=blockAncestor(getSelection().anchorNode);if(b2&&b2.tagName==="BLOCKQUOTE")b2.classList.toggle("pull",c==="pull");}scheduleSave();return;}
   if(c==="code"){restoreSel();const t=getSelection().toString();if(!t){toast("Select some text first.");return;}document.execCommand("insertHTML",false,`<code>${esc(t)}</code>&#8203;`);scheduleSave();return;}
   if(c==="hr"){insertHTML("<hr><p><br></p>");return;}
+  if(c==="size"){saveSel();if(!savedRange||savedRange.collapsed){toast("Select some text first.");return;}
+    const opts=[["sm","Small"],["","Normal"],["lg","Large"],["xl","Larger"],["xxl","Huge"]];
+    const d=dialog({title:"Text size",ok:null,extra:`<div class="swatches">${opts.map(o=>`<button type="button" class="sw" data-sz="${o[0]}" style="--c:var(--accent)">${o[1]}</button>`).join("")}</div>`});
+    d.root.addEventListener("click",ev=>{const b=ev.target.closest("[data-sz]");if(!b)return;d.close();applySize(b.dataset.sz);});return;}
   if(c==="color"){saveSel();if(!savedRange||savedRange.collapsed){toast("Select some text first.");return;}
     const ink=hexOk(E.post.ink)||sitePaper().ink;
     const d=dialog({title:"Text color",ok:null,extra:`<div class="swatches"><button type="button" class="sw" data-tc="${ink}" style="--c:${ink}"><i></i>Default</button>${TC.map(t=>`<button type="button" class="sw" data-tc="${t[1]}" style="--c:${t[1]}"><i></i>${t[2]}</button>`).join("")}</div><p class="h" style="font-size:12.5px;color:var(--dim);margin:0 0 10px">To change the whole post's text color, open Settings → Post colors.</p>`});
@@ -1251,7 +1281,7 @@ $("#editor-root").addEventListener("pointerdown",e=>{const h=e.target.closest&&e
   addEventListener("pointermove",mv);addEventListener("pointerup",up);});
 $("#editor-root").addEventListener("mousedown",e=>{if(e.target.closest("#tbar button"))e.preventDefault();});
 $("#editor-root").addEventListener("change",e=>{if(e.target.id==="e-style"){tbCmd("style",e.target.value);}});
-$("#editor-root").addEventListener("input",e=>{if(e.target.closest("#ed,#e-title,#e-sub")){scheduleSave();updWC();}});
+$("#editor-root").addEventListener("input",e=>{if(e.target.closest("#ed,#e-title,#e-sub")){if(e.inputType==="insertParagraph"&&e.target.closest("#ed"))resetNewParagraph();scheduleSave();updWC();}});
 $("#editor-root").addEventListener("keydown",e=>{
   if(!E)return;if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"&&e.target.closest("#ed")){e.preventDefault();tbCmd("link");}
   if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="s"){e.preventDefault();clearTimeout(E.saveT);saveDraft();}
