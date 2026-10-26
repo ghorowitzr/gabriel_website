@@ -23,7 +23,41 @@ export async function loadSite(env) {
     ]);
     row = await env.DB.prepare("SELECT value, version FROM kv WHERE key = ?").bind(KEY).first();
   }
-  return { site: JSON.parse(row.value), version: row.version };
+  let site = JSON.parse(row.value), version = row.version;
+  const m = await runMigrations(env, site, version);
+  if (m) ({ site, version } = m);
+  return { site, version };
+}
+
+// One-time edits to content that is already stored (the stored site isn't re-read from the seed file).
+// Each runs once, remembered in the `kv` table, so anything you later change by hand stays changed.
+let migrationsDone = false;
+async function runMigrations(env, site, version) {
+  if (migrationsDone) return null;
+  const MARK = "migration:2026-10-26-inspo";
+  const seen = await env.DB.prepare("SELECT 1 FROM kv WHERE key = ?").bind(MARK).first();
+  if (seen) { migrationsDone = true; return null; }
+  const next = JSON.parse(JSON.stringify(site));
+  for (const tab of next.tabs || []) {
+    const had = (tab.blocks || []).some((b) => b.type === "silhouette") || tab.cursor === "shadow";
+    tab.blocks = (tab.blocks || []).filter((b) => b.type !== "silhouette");
+    if (tab.cursor === "shadow") delete tab.cursor;               // the soft shadow that followed the mouse
+    for (const b of tab.blocks) if (b.type === "portrait" && b.hint === undefined) b.hint = "";   // "click or drag across the face" caption off
+    if ((had || tab.slug === "cool-stuff") && !tab.blocks.some((b) => b.type === "carousel")) {
+      tab.blocks.unshift({ id: "car-" + Math.random().toString(36).slice(2, 8), type: "carousel", items: [], h: 300, speed: 40 });
+    }
+  }
+  for (const p of next.posts || []) {
+    if (typeof p.html === "string") p.html = p.html.replace(/<figcaption>\s*Add a caption\s*<\/figcaption>/g, "");   // left-over placeholder text
+  }
+  const t = now();
+  const value = JSON.stringify(next);
+  const res = await env.DB.prepare("UPDATE kv SET value = ?, version = version + 1, updated_at = ? WHERE key = ? AND version = ?")
+    .bind(value, t, KEY, version).run();
+  if (!res.meta.changes) return null;                              // someone saved at the same moment; try again next load
+  await env.DB.prepare("INSERT OR IGNORE INTO kv (key, value, version, updated_at) VALUES (?, '1', 1, ?)").bind(MARK, t).run();
+  migrationsDone = true;
+  return { site: next, version: version + 1 };
 }
 
 export function postTime(p, site) {
