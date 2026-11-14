@@ -289,6 +289,25 @@ console.log("\nA send that was cut off part-way is recovered");
   ok(!got.includes("late@example.com"), "someone claimed by a run still in progress is not emailed twice", got);
 }
 
+console.log("\nRatings, manual order, resume migration");
+{
+  const g = await owner.get("/api/site");
+  const st = g.data.site, ver = g.data.version;
+  const book = st.tabs.find((t) => t.slug === "book-reviews");
+  ok(book && book.sort === "manual", "Book Reviews switched to hand ordering", book && book.sort);
+  const me = st.tabs.find((t) => t.slug === "gabriel");
+  ok(me && me.noPosts === true, "Gabriel hides posts");
+  ok(me.blocks.some((b) => b.type === "resume"), "Gabriel has a resume block");
+  const p0 = st.posts.find((p) => p.tabId === book.id);
+  p0.rating = 4.5;
+  st.posts.find((p) => p.id !== p0.id && p.tabId === book.id).rating = 99;
+  r = await owner.put("/api/site", { site: st, baseVersion: ver });
+  ok(r.status === 200, "owner saves ratings", r.status);
+  const g2 = await owner.get("/api/site");
+  ok(g2.data.site.posts.find((p) => p.id === p0.id).rating === 4.5, "rating 4.5 kept");
+  ok(g2.data.site.posts.filter((p) => p.rating === 5).length === 1, "rating above 5 is capped at 5");
+}
+
 console.log("\nPassword lockout (kept last: it blocks this machine for 15 minutes)");
 const guesser = new Client();
 let last;

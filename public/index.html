@@ -322,6 +322,65 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:400;margin:0;text-wrap:balanc
 .blk-portrait canvas.down{cursor:grabbing}
 .blk-image figcaption:not([contenteditable]):empty,.blk-it figcaption:not([contenteditable]):empty,.prose:not(#ed) figcaption:empty{display:none}
 #ed figcaption:empty::before{content:"Add a caption";color:var(--dim);opacity:.65}
+/* ---- star ratings: gold stars, halves allowed ---- */
+.stars{--sz:18px;display:block;width:calc(var(--sz) * 5);height:var(--sz);background:linear-gradient(90deg,#f5c542 0,#e0a419 calc(var(--r,0) / 5 * 100%),rgba(255,255,255,.2) calc(var(--r,0) / 5 * 100%));-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2.6l2.8 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17.5 6 21l1.5-6.8L2.3 9.6l6.9-.7z'/%3E%3C/svg%3E") 0 0 / var(--sz) var(--sz) repeat-x;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2.6l2.8 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17.5 6 21l1.5-6.8L2.3 9.6l6.9-.7z'/%3E%3C/svg%3E") 0 0 / var(--sz) var(--sz) repeat-x;filter:drop-shadow(0 0 5px rgba(245,197,66,.35))}
+.paper .stars{background:linear-gradient(90deg,#e8b01c 0,#cf9210 calc(var(--r,0) / 5 * 100%),rgba(0,0,0,.14) calc(var(--r,0) / 5 * 100%))}
+.book .bs{display:block;min-height:18px}.book .bs .stars{--sz:17px;margin-inline:auto}
+.card .cstars{padding:10px 14px 0}.card .cstars .stars{--sz:15px}
+.post .rating{margin:18px 0 4px}.post .rating .stars{--sz:24px}
+.rowctl{display:flex;gap:6px;margin-top:2px}
+/* ---- resume (layout after lucaborletti.com's resume section, in this site's colors) ---- */
+.rs{margin-top:84px}
+.rs-sec{margin-bottom:88px}
+.rs-sec>h2{font-family:var(--display);font-weight:400;font-size:clamp(30px,4.4vw,42px);letter-spacing:-.03em;line-height:1.15;margin:0 0 46px;color:var(--fg)}
+.rs-list{display:grid;gap:46px}
+.rs-e{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:8px 22px;align-items:start}
+.rs-e.nologo{grid-template-columns:minmax(0,1fr) auto}
+.rs-logo{width:52px;height:52px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.07);padding:5px}
+.rs-logo img{display:block;width:100%;height:100%;object-fit:contain;border-radius:6px}
+.rs-h h3,.rs-pc h3{font-family:var(--sans);font-weight:550;font-size:19px;letter-spacing:-.02em;line-height:1.35;margin:0;color:var(--fg)}
+.rs-h h3 a,.rs-pc h3 a{text-decoration:none;border-bottom:1px solid var(--line-strong)}
+.rs-h h3 a:hover,.rs-pc h3 a:hover{border-bottom-color:var(--fg)}
+.rs-role{margin:3px 0 0;color:var(--body);font-size:16px}
+.rs-note{margin:5px 0 0;color:var(--muted);font-size:14px}
+.rs-meta{text-align:right;color:var(--muted);font-size:14px;line-height:1.55}.rs-meta p{margin:0}
+.rs-d{grid-column:2/-1;max-width:72ch;margin-top:4px;color:var(--body);font-size:15.5px;line-height:1.65}
+.rs-e.nologo .rs-d{grid-column:1/-1}
+.rs-d p{margin:0 0 12px}.rs-d p:last-child{margin:0}
+.rs-d a,.rs-pc .rs-pd a{color:var(--fg);text-underline-offset:4px}
+.rs-p{display:grid;grid-template-columns:.95fr 1.05fr;gap:40px;align-items:center}
+.rs-p.noimg{grid-template-columns:minmax(0,1fr)}
+.rs-pm{aspect-ratio:16/10;border:1px solid var(--line);border-radius:8px;background:rgba(255,255,255,.05);padding:18px;overflow:hidden;min-width:0}
+.rs-pm img{display:block;width:100%;height:100%;object-fit:contain}
+.rs-period{margin:0 0 6px;color:var(--muted);font-size:14px}
+.rs-pd{margin:14px 0 0;color:var(--body);font-size:15.5px;line-height:1.65;max-width:62ch}
+.rs-hl{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:4px;color:var(--body);font-size:14.5px}
+.rs-hl li:before{content:"\2014\00a0";color:var(--muted)}
+.rs-links{display:flex;flex-wrap:wrap;gap:6px 24px;margin-top:16px;font-size:14px}
+.rs-links a{display:inline-flex;align-items:center;min-height:36px;text-underline-offset:5px;color:var(--fg)}
+.rs-more{margin-top:44px}
+.rs-more>summary{cursor:pointer;list-style:none;display:grid;grid-template-columns:minmax(0,1fr) 28px;gap:6px 20px;padding:20px 24px;border-radius:8px;background:rgba(255,255,255,.06);border:1px solid var(--line);transition:background-color .18s}
+.rs-more>summary::-webkit-details-marker{display:none}
+.rs-more>summary:hover{background:rgba(255,255,255,.1)}
+.rs-ml{display:flex;align-items:center;gap:10px;font-size:17px;letter-spacing:-.02em;font-weight:500;color:var(--fg)}
+.rs-mc{color:var(--muted);font-size:14px;font-variant-numeric:tabular-nums;font-weight:400}
+.rs-mp{grid-column:1/-1;color:var(--muted);font-size:14px;line-height:1.5}
+.rs-mi{grid-area:1/2;align-self:center;width:24px;height:24px;position:relative}
+.rs-mi:before,.rs-mi:after{content:"";position:absolute;left:3px;top:11px;width:18px;height:1.5px;background:var(--fg)}
+.rs-mi:after{transform:rotate(90deg);transition:transform .18s}
+.rs-more[open] .rs-mi:after{transform:rotate(0)}
+.rs-more-c{padding-top:44px}
+.rs-empty{color:var(--muted);font-size:14px;margin:0}
+@media (max-width:760px){.rs-e,.rs-e.nologo{grid-template-columns:44px minmax(0,1fr)}.rs-e.nologo{grid-template-columns:minmax(0,1fr)}.rs-logo{width:44px;height:44px}.rs-meta{grid-column:1/-1;text-align:left}.rs-d,.rs-e.nologo .rs-d{grid-column:1/-1}.rs-p{grid-template-columns:minmax(0,1fr);gap:20px}}
+/* resume editor (inside a dialog) */
+.rse details{border:1px solid var(--line);margin:8px 0}
+.rse summary{cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;font-size:14px}
+.rse summary>span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rse .eb{display:grid;gap:10px;padding:6px 12px 14px}
+.rse .sec{border:1px solid var(--line-strong);padding:14px;margin:0 0 16px;background:rgba(255,255,255,.03)}
+.rse .sech{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.rse .sech input{flex:1;min-width:140px}
+.rse .f{margin:0}
 .car{position:relative;overflow:hidden;width:100%;max-width:100%;min-width:0;height:calc(var(--ph) + 96px);cursor:grab;touch-action:pan-y;user-select:none;-webkit-user-select:none;-webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)}
 .car.drag{cursor:grabbing}
 .car::before{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(ellipse 32% 105% at 50% -4%,rgba(255,226,170,.24),rgba(255,226,170,.07) 56%,transparent 76%);-webkit-mask-image:linear-gradient(180deg,transparent,#000 30%);mask-image:linear-gradient(180deg,transparent,#000 30%)}
@@ -764,13 +823,66 @@ function navHTML(active){
 }
 function cardHTML(p,i,tab){
   const cov=safeMedia(p.cover);const sched=new Date(p.date).getTime()>now();
-  const tools=L&&tab.sort==="manual"?`<div class="cardtools"><button data-act="mv-post" data-id="${p.id}" data-d="-1" title="Move earlier">←</button><button data-act="mv-post" data-id="${p.id}" data-d="1" title="Move later">→</button></div>`:"";
-  return `<a class="card" style="--i:${i}" href="#p-${esc(p.slug)}">${tools}<div class="sq${cov?"":" gen"}">${cov?`<img src="${esc(cov)}" alt="" loading="lazy">`:`<span>${esc(p.title)}</span>`}</div>
+  const tools=ED()?`<div class="cardtools"><button data-act="mv-post" data-id="${p.id}" data-d="-1" title="Move earlier">←</button><button data-act="mv-post" data-id="${p.id}" data-d="1" title="Move later">→</button></div>`:"";
+  return `<a class="card" style="--i:${i}" href="#p-${esc(p.slug)}">${tools}<div class="sq${cov?"":" gen"}">${cov?`<img src="${esc(cov)}" alt="" loading="lazy">`:`<span>${esc(p.title)}</span>`}</div>${p.rating?`<div class="cstars">${starsHTML(p.rating)}</div>`:""}
    <div class="cbody"><div class="cmeta tab"><span>${fmtDate(p.date)}</span>${sched?'<span class="badge sched">SCHEDULED</span>':""}${p.example?'<span class="badge">EXAMPLE</span>':""}${p.audience==="subscribers"?'<span class="badge">SUBSCRIBERS</span>':""}</div><h3>${esc(p.title)}</h3>${p.subtitle?`<p>${esc(p.subtitle)}</p>`:""}</div></a>`;
+}
+const starsHTML=(r,cls)=>{r=Math.round(Number(r)*2)/2;return r>0?`<span class="stars${cls?" "+cls:""}" style="--r:${Math.min(5,r)}" role="img" aria-label="${Math.min(5,r)} out of 5 stars"></span>`:"";};
+const rsLink=u=>/^https?:\/\//i.test(String(u||"").trim())?String(u).trim():"";
+const rsText=t=>String(t||"").split(/\n\s*\n/).map(x=>x.trim()).filter(Boolean).map(x=>"<p>"+esc(x).replace(/\n/g,"<br>").replace(/(https?:\/\/[^\s<]+[^\s<.,;:!?)])/g,'<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>')+"</p>").join("");
+function rsEntry(k,e){
+  if(k==="project"){const im=safeMedia(e.image),u=rsLink(e.url),links=(e.links||[]).map(l=>({l:String(l.l||"").trim(),u:rsLink(l.u)})).filter(l=>l.u);
+    const hl=String(e.hl||"").split("\n").map(x=>x.trim()).filter(Boolean);
+    return `<article class="rs-p${im?"":" noimg"}">${im?`<div class="rs-pm"><img src="${esc(im)}" alt="" loading="lazy"></div>`:""}<div class="rs-pc">${e.period?`<p class="rs-period">${esc(e.period)}</p>`:""}<h3>${u?`<a href="${esc(u)}" target="_blank" rel="noopener noreferrer">${esc(e.name)}</a>`:esc(e.name)}</h3>${e.desc?`<div class="rs-pd">${rsText(e.desc)}</div>`:""}${hl.length?`<ul class="rs-hl">${hl.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:""}${links.length?`<div class="rs-links">${links.map(l=>`<a href="${esc(l.u)}" target="_blank" rel="noopener noreferrer">${esc(l.l||"Link")} ↗</a>`).join("")}</div>`:""}</div></article>`;}
+  const lg=safeMedia(e.logo),u=rsLink(e.url);
+  return `<article class="rs-e${lg?"":" nologo"}">${lg?`<div class="rs-logo"><img src="${esc(lg)}" alt="" loading="lazy"></div>`:""}<div class="rs-h"><h3>${u?`<a href="${esc(u)}" target="_blank" rel="noopener noreferrer">${esc(e.org)}</a>`:esc(e.org)}</h3>${e.role?`<p class="rs-role">${esc(e.role)}</p>`:""}${e.note?`<p class="rs-note">${esc(e.note)}</p>`:""}</div><div class="rs-meta">${e.dates?`<p>${esc(e.dates)}</p>`:""}${e.loc?`<p>${esc(e.loc)}</p>`:""}</div>${e.desc?`<div class="rs-d">${rsText(e.desc)}</div>`:""}</article>`;
+}
+function resumeHTML(b,edit){
+  const out=(b.sections||[]).map(sc=>{const k=sc.kind==="project"?"project":"work";
+    const es=(sc.entries||[]).filter(e=>k==="project"?(e.name||e.desc):(e.org||e.role));
+    if(!es.length)return edit?`<section class="rs-sec"><h2>${esc(sc.title)}</h2><p class="rs-empty">Nothing here yet. Click “Edit resume” above to add entries.</p></section>`:"";
+    const n=Math.max(0,Number(sc.show)||0),collapse=n>0&&es.length-n>=2,first=collapse?es.slice(0,n):es,rest=collapse?es.slice(n):[];
+    const names=rest.map(e=>k==="project"?e.name:e.org).filter(Boolean).slice(0,6).join(" · ");
+    return `<section class="rs-sec" id="rs-${esc(slugify(sc.title||"section"))}"><h2>${esc(sc.title)}</h2><div class="rs-list">${first.map(e=>rsEntry(k,e)).join("")}</div>${rest.length?`<details class="rs-more"><summary><span class="rs-ml">More ${esc(String(sc.title||"").toLowerCase())} <span class="rs-mc">${rest.length}</span></span><i class="rs-mi" aria-hidden="true"></i><span class="rs-mp">${esc(names)}</span></summary><div class="rs-more-c"><div class="rs-list">${rest.map(e=>rsEntry(k,e)).join("")}</div></div></details>`:""}</section>`;}).join("");
+  return out?`<div class="rs">${out}</div>`:"";
+}
+function resumeOpts(b){
+  const w=clone(b.sections||[]);const open=new Set();
+  const get=(path)=>{const a=path.split(".");let o=w;for(let i=0;i<a.length-1;i++)o=o[a[i]];return [o,a[a.length-1]];};
+  const fld=(p,l,v,ta)=>`<div class="f"><label>${l}</label>${ta?`<textarea data-p="${p}" rows="3">${esc(v||"")}</textarea>`:`<input type="text" data-p="${p}" value="${esc(v||"")}">`}</div>`;
+  const img=(p,l,v)=>{const u=safeMedia(v);return `<div class="f"><label>${l}</label><div class="row">${u?`<img class="thumbprev" src="${esc(u)}" alt="" style="width:56px;height:56px;object-fit:contain">`:""}<button type="button" class="btn xs" data-r="img" data-p="${p}">${u?"Replace":"Upload"}</button>${u?`<button type="button" class="btn xs ghost" data-r="noimg" data-p="${p}">Remove</button>`:""}</div></div>`;};
+  const ent=(sc,si,e,ei)=>{const pr=`${si}.entries.${ei}.`,proj=sc.kind==="project";const ttl=proj?(e.name||"Untitled project"):(e.org||"Untitled");
+    const links=(e.links||[]).map((l,li)=>`<div class="row"><input type="text" data-p="${pr}links.${li}.l" value="${esc(l.l||"")}" placeholder="Label" style="width:34%"><input type="text" data-p="${pr}links.${li}.u" value="${esc(l.u||"")}" placeholder="https://…"></div>`).join("");
+    return `<details data-id="${e.id}"${open.has(e.id)?" open":""}><summary><span>${esc(ttl)}${!proj&&e.role?" · "+esc(e.role):""}</span><span class="rowctl"><button type="button" class="btn xs ghost" data-r="eup" data-si="${si}" data-ei="${ei}" title="Move up">↑</button><button type="button" class="btn xs ghost" data-r="edown" data-si="${si}" data-ei="${ei}" title="Move down">↓</button><button type="button" class="btn xs ghost" data-r="edel" data-si="${si}" data-ei="${ei}">Remove</button></span></summary><div class="eb">${proj?
+      fld(pr+"name","Project name",e.name)+fld(pr+"period","Dates (optional)",e.period)+fld(pr+"url","Main link (makes the name clickable)",e.url)+fld(pr+"desc","Description",e.desc,1)+fld(pr+"hl","Highlights, one per line (optional)",e.hl,1)+img(pr+"image","Picture")+`<div class="f"><label>Extra links</label>${links}<button type="button" class="btn xs" data-r="addlink" data-si="${si}" data-ei="${ei}">+ Add link</button></div>`
+      :fld(pr+"org","Organization or school",e.org)+fld(pr+"role","Role or degree",e.role)+fld(pr+"dates","Dates",e.dates)+fld(pr+"loc","Location",e.loc)+fld(pr+"note","Small note (optional)",e.note)+fld(pr+"url","Link (makes the name clickable)",e.url)+fld(pr+"desc","Description",e.desc,1)+img(pr+"logo","Logo")}</div></details>`;};
+  const all=()=>w.map((sc,si)=>`<div class="sec"><div class="sech"><input type="text" data-p="${si}.title" value="${esc(sc.title||"")}" aria-label="Section title"><span class="rowctl"><button type="button" class="btn xs ghost" data-r="sup" data-si="${si}">↑</button><button type="button" class="btn xs ghost" data-r="sdown" data-si="${si}">↓</button><button type="button" class="btn xs ghost" data-r="sdel" data-si="${si}">Remove section</button></span></div>
+    <div class="f" style="margin-bottom:6px"><label>Show first</label><input type="number" min="0" max="30" data-p="${si}.show" value="${Number(sc.show)||0}" style="width:90px"><span class="h">Entries after this number fold into a “More” row. 0 shows everything.</span></div>
+    ${(sc.entries||[]).map((e,ei)=>ent(sc,si,e,ei)).join("")||'<p class="h">No entries yet.</p>'}
+    <button type="button" class="btn xs" data-r="addent" data-si="${si}">+ Add ${sc.kind==="project"?"project":"entry"}</button></div>`).join("")+`<div class="rowctl"><button type="button" class="btn xs" data-r="addsec" data-k="work">+ Experience or education section</button><button type="button" class="btn xs" data-r="addsec" data-k="project">+ Projects section</button></div>`;
+  const d=dialog({title:"Edit resume",ok:"Done",extra:`<div class="rse" id="rse">${all()}</div>`,onOk:()=>{b.sections=w;render();}});
+  d.root.querySelector(".dbox").style.width="min(780px,100%)";
+  const box=$("#rse");const paint=()=>{box.innerHTML=all();};
+  box.addEventListener("keydown",e=>{if(e.key==="Enter")e.stopPropagation();});
+  box.addEventListener("input",e=>{const el=e.target.closest("[data-p]");if(!el||el.tagName==="BUTTON")return;const [o,k]=get(el.dataset.p);o[k]=el.type==="number"?Math.max(0,Number(el.value)||0):el.value;});
+  box.addEventListener("toggle",e=>{const t=e.target;if(t.dataset&&t.dataset.id){if(t.open)open.add(t.dataset.id);else open.delete(t.dataset.id);}},true);
+  const arm=btn=>{if(btn.dataset.armed){return true;}btn.dataset.armed="1";btn.textContent="Sure?";setTimeout(()=>{if(btn.isConnected){delete btn.dataset.armed;btn.textContent=btn.dataset.r==="sdel"?"Remove section":"Remove";}},3000);return false;};
+  const mv=(a,i,dj)=>{const j=i+dj;if(j<0||j>=a.length)return;[a[i],a[j]]=[a[j],a[i]];};
+  box.addEventListener("click",async e=>{const bt=e.target.closest("[data-r]");if(!bt)return;e.preventDefault();const r=bt.dataset.r,si=Number(bt.dataset.si),ei=Number(bt.dataset.ei);
+    if(r==="addsec"){const pj=bt.dataset.k==="project";w.push({id:uid("rs"),title:pj?"Projects":"Experience",kind:pj?"project":"work",show:3,entries:[]});}
+    else if(r==="sdel"){if(!arm(bt))return;w.splice(si,1);}
+    else if(r==="sup")mv(w,si,-1);else if(r==="sdown")mv(w,si,1);
+    else if(r==="addent"){const id=uid("re");w[si].entries.push(w[si].kind==="project"?{id,name:"",desc:"",links:[]}:{id,org:"",role:""});open.add(id);}
+    else if(r==="edel"){if(!arm(bt))return;w[si].entries.splice(ei,1);}
+    else if(r==="eup")mv(w[si].entries,ei,-1);else if(r==="edown")mv(w[si].entries,ei,1);
+    else if(r==="addlink"){const en=w[si].entries[ei];en.links=en.links||[];en.links.push({l:"",u:""});open.add(en.id);}
+    else if(r==="img"){const fs=await pickFiles("image/*");if(!fs[0])return;const u=await upload(fs[0]);if(!u)return;const [o,k]=get(bt.dataset.p);o[k]=u;}
+    else if(r==="noimg"){const [o,k]=get(bt.dataset.p);o[k]="";}
+    paint();});
 }
 function blockHTML(b,edit){
   const ce=edit?' contenteditable="true"':"";const bind=f=>edit?` data-bind="${b.id}.${f}"`:"";
-  const tools=edit?`<div class="btools"><button data-act="blk-up" data-id="${b.id}" title="Move up">↑</button><button data-act="blk-down" data-id="${b.id}" title="Move down">↓</button>${b.type==="image"||b.type==="imagetext"?`<button data-act="blk-img" data-id="${b.id}">Image</button>`:""}${b.type==="carousel"?`<button data-act="blk-car" data-id="${b.id}">Add images</button>`:""}${b.type!=="divider"?`<button data-act="blk-opts" data-id="${b.id}">Options</button>`:""}<button data-act="blk-del" data-id="${b.id}" title="Remove">✕</button></div>`:"";
+  const tools=edit?`<div class="btools"><button data-act="blk-up" data-id="${b.id}" title="Move up">↑</button><button data-act="blk-down" data-id="${b.id}" title="Move down">↓</button>${b.type==="image"||b.type==="imagetext"?`<button data-act="blk-img" data-id="${b.id}">Image</button>`:""}${b.type==="carousel"?`<button data-act="blk-car" data-id="${b.id}">Add images</button>`:""}${b.type!=="divider"?`<button data-act="blk-opts" data-id="${b.id}">${b.type==="resume"?"Edit resume":"Options"}</button>`:""}<button data-act="blk-del" data-id="${b.id}" title="Remove">✕</button></div>`:"";
   const img=b.src&&safeMedia(b.src)?`<img src="${esc(safeMedia(b.src))}" alt="${esc(b.alt||"")}">`:(edit?`<div class="blk-ph">Click “Image” to upload</div>`:"");
   let inner="";
   if(b.type==="heading")inner=`<div class="blk-heading ${b.size==="s"?"s":""}"><h2${ce}${bind("text")}>${esc(b.text||"")}</h2></div>`;
@@ -787,6 +899,7 @@ function blockHTML(b,edit){
     if(!its.length){if(!edit)return "";inner=`<div class="blk-ph">Image carousel is empty. Click “Add images” above.</div>`;}
     else{const h=Math.max(100,Math.min(700,Number(b.h)||280)),mx=Math.max(1,...its.map(i=>(Number(i.s)||100)/100));
       inner=`<div class="car${b.glow===false?" noglow":""}" role="region" aria-label="Image carousel" style="--ch:${h}px;--ph:${Math.round(h*mx)}px" data-speed="${Number(b.speed??40)||0}"><div class="car-track">${its.map(i=>`<figure class="car-it" style="--sc:${(Number(i.s)||100)/100}"><img src="${esc(safeMedia(i.src))}" alt="${esc(i.alt||"")}" draggable="false"></figure>`).join("")}</div></div>`;}}
+  else if(b.type==="resume"){inner=resumeHTML(b,edit);if(!inner){if(!edit)return "";inner=`<div class="blk-ph">Resume is empty. Click “Edit resume” above.</div>`;}}
   else if(b.type==="spacer")inner=`<div class="blk-spacer" style="--h:${Number(b.h)||40}px">${edit?'<span class="mono" style="font-size:11px;color:var(--dim)">spacer</span>':""}</div>`;
   return `<div class="blk" data-blk="${b.id}">${tools}${inner}</div>`;
 }
@@ -848,20 +961,20 @@ function initCarousels(){$$(".car").forEach(el=>{if(el._st)return;
 });}
 function tabView(tab){
   const ps=sortedPosts(tab);const edit=!!L;const own=ED()&&!L;const gal=tab.layout==="gallery"||tab.layout==="album"||tab.layout==="awards";const showT=tab.showTitle!==false;
-  const head=!showT?(own&&!gal?`<div class="wrap" style="display:flex;justify-content:flex-end;padding-top:40px"><button class="plus" data-act="new-post" data-tab="${tab.id}" aria-label="New post in ${esc(tab.name)}">+</button></div>`:""):`<header class="tabhead wrap"><div style="min-width:0">${edit?`<h1><span class="inl" contenteditable="true" data-bind="tab:${tab.id}.title">${esc(tab.title||tab.name)}</span></h1>`:`<h1>${esc(tab.title||tab.name)}</h1>`}${tab===V().tabs[0]&&V().site.tagline?`<p class="tl">${edit?`<span class="inl" contenteditable="true" data-bind="site.tagline">${esc(V().site.tagline)}</span>`:esc(V().site.tagline)}</p>`:""}</div>${own?`<button class="plus" data-act="new-post" data-tab="${tab.id}" title="New post in ${esc(tab.name)}" aria-label="New post in ${esc(tab.name)}">+</button>`:""}</header>`;
-  const tabedit=edit?`<div class="wrap"><div class="tabedit"><label class="l" for="te-name">TAB NAME</label><input id="te-name" type="text" value="${esc(tab.name)}" maxlength="40" style="width:150px"><button class="btn xs" data-act="tab-mv" data-d="-1">← Move</button><button class="btn xs" data-act="tab-mv" data-d="1">Move →</button><span class="l">LAYOUT</span><select id="te-layout"><option value="grid"${!["gallery","album","awards"].includes(tab.layout)?" selected":""}>Grid of cards</option><option value="gallery"${tab.layout==="gallery"?" selected":""}>Sliding gallery</option><option value="awards"${tab.layout==="awards"||tab.layout==="album"?" selected":""}>Awards grid</option></select><label class="ck"><input type="checkbox" id="te-title"${tab.showTitle!==false?" checked":""}> Show title</label><span class="l">BACKGROUND</span><select id="te-bg"><option value="stars"${tabBg(tab).type==="stars"?" selected":""}>Starfield</option><option value="paper"${tabBg(tab).type==="paper"?" selected":""}>Substack paper</option><option value="orange"${tabBg(tab).type==="orange"?" selected":""}>Orange</option><option value="plain"${tabBg(tab).type==="plain"?" selected":""}>Plain dark</option><option value="image"${tabBg(tab).type==="image"?" selected":""}>Image</option></select>${tabBg(tab).type==="image"?`<button class="btn xs" data-act="tab-bg-up">${tabBg(tab).image?"Replace image":"Upload image"}</button><label class="ck">Darkness <input type="range" id="te-dim" min="0" max="0.9" step="0.05" value="${tabBg(tab).dim??.45}"></label>`:""}${tabBg(tab).type==="stars"?`<label class="ck"><input type="checkbox" id="te-grass"${tabBg(tab).grass!==false?" checked":""}> Grass</label>`:""}<label class="ck"><input type="checkbox" id="te-met"${tabBg(tab).meteors?" checked":""}> Shooting stars</label><label class="ck"><input type="checkbox" id="te-cur"${tab.cursor==="shadow"?" checked":""}> Mouse shadow</label>${gal?"":`<span class="l">COLUMNS</span>`}<select id="te-cols"${gal?" hidden":""}>${[2,3,4].map(n=>`<option${tab.cols==n?" selected":""}>${n}</option>`).join("")}</select><span class="l">ORDER</span><select id="te-sort" data-act-change="tab-sort"><option value="date"${tab.sort!=="manual"?" selected":""}>Newest first</option><option value="manual"${tab.sort==="manual"?" selected":""}>Manual (arrows on cards)</option></select><button class="btn xs" data-act="tab-add">+ New tab</button><button class="btn xs danger" data-act="tab-del">Delete tab</button><button class="btn xs" data-act="site-settings">Site settings</button></div></div>`:"";
+  const head=!showT?(own&&!gal&&!tab.noPosts?`<div class="wrap" style="display:flex;justify-content:flex-end;padding-top:40px"><button class="plus" data-act="new-post" data-tab="${tab.id}" aria-label="New post in ${esc(tab.name)}">+</button></div>`:""):`<header class="tabhead wrap"><div style="min-width:0">${edit?`<h1><span class="inl" contenteditable="true" data-bind="tab:${tab.id}.title">${esc(tab.title||tab.name)}</span></h1>`:`<h1>${esc(tab.title||tab.name)}</h1>`}${tab===V().tabs[0]&&V().site.tagline?`<p class="tl">${edit?`<span class="inl" contenteditable="true" data-bind="site.tagline">${esc(V().site.tagline)}</span>`:esc(V().site.tagline)}</p>`:""}</div>${own&&!tab.noPosts?`<button class="plus" data-act="new-post" data-tab="${tab.id}" title="New post in ${esc(tab.name)}" aria-label="New post in ${esc(tab.name)}">+</button>`:""}</header>`;
+  const tabedit=edit?`<div class="wrap"><div class="tabedit"><label class="l" for="te-name">TAB NAME</label><input id="te-name" type="text" value="${esc(tab.name)}" maxlength="40" style="width:150px"><button class="btn xs" data-act="tab-mv" data-d="-1">← Move</button><button class="btn xs" data-act="tab-mv" data-d="1">Move →</button><span class="l">LAYOUT</span><select id="te-layout"><option value="grid"${!["gallery","album","awards"].includes(tab.layout)?" selected":""}>Grid of cards</option><option value="gallery"${tab.layout==="gallery"?" selected":""}>Sliding gallery</option><option value="awards"${tab.layout==="awards"||tab.layout==="album"?" selected":""}>Awards grid</option></select><label class="ck"><input type="checkbox" id="te-title"${tab.showTitle!==false?" checked":""}> Show title</label><label class="ck"><input type="checkbox" id="te-posts"${tab.noPosts?"":" checked"}> Show posts</label><span class="l">BACKGROUND</span><select id="te-bg"><option value="stars"${tabBg(tab).type==="stars"?" selected":""}>Starfield</option><option value="paper"${tabBg(tab).type==="paper"?" selected":""}>Substack paper</option><option value="orange"${tabBg(tab).type==="orange"?" selected":""}>Orange</option><option value="plain"${tabBg(tab).type==="plain"?" selected":""}>Plain dark</option><option value="image"${tabBg(tab).type==="image"?" selected":""}>Image</option></select>${tabBg(tab).type==="image"?`<button class="btn xs" data-act="tab-bg-up">${tabBg(tab).image?"Replace image":"Upload image"}</button><label class="ck">Darkness <input type="range" id="te-dim" min="0" max="0.9" step="0.05" value="${tabBg(tab).dim??.45}"></label>`:""}${tabBg(tab).type==="stars"?`<label class="ck"><input type="checkbox" id="te-grass"${tabBg(tab).grass!==false?" checked":""}> Grass</label>`:""}<label class="ck"><input type="checkbox" id="te-met"${tabBg(tab).meteors?" checked":""}> Shooting stars</label><label class="ck"><input type="checkbox" id="te-cur"${tab.cursor==="shadow"?" checked":""}> Mouse shadow</label>${gal?"":`<span class="l">COLUMNS</span>`}<select id="te-cols"${gal?" hidden":""}>${[2,3,4].map(n=>`<option${tab.cols==n?" selected":""}>${n}</option>`).join("")}</select><span class="l">ORDER</span><select id="te-sort" data-act-change="tab-sort"><option value="date"${tab.sort!=="manual"?" selected":""}>Newest first</option><option value="manual"${tab.sort==="manual"?" selected":""}>Manual (arrows on cards)</option></select><button class="btn xs" data-act="tab-add">+ New tab</button><button class="btn xs danger" data-act="tab-del">Delete tab</button><button class="btn xs" data-act="site-settings">Site settings</button></div></div>`:"";
   const blocks=(tab.blocks||[]).map(b=>blockHTML(b,edit)).join("");
-  const add=edit?`<div class="addblk"><span class="l">ADD BLOCK</span>${[["heading","Heading"],["text","Text"],["image","Image"],["imagetext","Image + text"],["portrait","Dot portrait"],["carousel","Image carousel"],["button","Button"],["divider","Divider"],["spacer","Spacer"]].map(([k,n])=>`<button class="btn xs" data-act="blk-add" data-type="${k}">+ ${n}</button>`).join("")}</div>`:"";
+  const add=edit?`<div class="addblk"><span class="l">ADD BLOCK</span>${[["heading","Heading"],["text","Text"],["image","Image"],["imagetext","Image + text"],["portrait","Dot portrait"],["carousel","Image carousel"],["resume","Resume"],["button","Button"],["divider","Divider"],["spacer","Spacer"]].map(([k,n])=>`<button class="btn xs" data-act="blk-add" data-type="${k}">+ ${n}</button>`).join("")}</div>`:"";
   if(gal)return `${head}${tabedit}${(tab.blocks||[]).length||edit?`<div class="wrap" style="margin-top:24px"><div class="blocks${edit?" edit":""}">${blocks}${add}</div></div>`:""}${tab.layout==="awards"||tab.layout==="album"?awardsHTML(tab):galleryHTML(tab)}`;
-  const grid=ps.length||own?`<div class="grid" style="--cols:${tab.cols||3}">${ps.map((p,i)=>cardHTML(p,i,tab)).join("")}${own?`<button class="addcard" style="--i:${ps.length}" data-act="new-post" data-tab="${tab.id}"><span class="plus" aria-hidden="true">+</span>New post in ${esc(tab.name)}</button>`:""}</div>`:`<div class="empty"><strong>Nothing here yet.</strong>New posts will appear here.</div>`;
+  const grid=tab.noPosts?"":ps.length||own?`<div class="grid" style="--cols:${tab.cols||3}">${ps.map((p,i)=>cardHTML(p,i,tab)).join("")}${own?`<button class="addcard" style="--i:${ps.length}" data-act="new-post" data-tab="${tab.id}"><span class="plus" aria-hidden="true">+</span>New post in ${esc(tab.name)}</button>`:""}</div>`:`<div class="empty"><strong>Nothing here yet.</strong>New posts will appear here.</div>`;
   return `${head}${tabedit}<main class="wrap" style="margin-top:${edit?24:0}px"><div class="blocks${edit?" edit":""}">${blocks}${add}</div>${grid}</main>`;
 }
 const PIN='<svg viewBox="0 0 10 10" aria-hidden="true"><path d="M5 0l1.4 3.3L10 3.6 7.3 6l.8 3.5L5 7.7 1.9 9.5 2.7 6 0 3.6l3.6-.3z"/></svg>';
-function galleryPosts(tab){const ps=sortedPosts(tab);return ps.filter(p=>p.pinned).concat(ps.filter(p=>!p.pinned));}
+function galleryPosts(tab){const ps=sortedPosts(tab);if(tab.sort==="manual")return ps;return ps.filter(p=>p.pinned).concat(ps.filter(p=>!p.pinned));}
 function galleryHTML(tab){
   const ps=galleryPosts(tab);const own=ED()&&!L;const rev=/review/i.test(tab.name);const noun=rev?["REVIEW","REVIEWS"]:["POST","POSTS"];
   const items=ps.map((p,i)=>{const cov=safeMedia(p.cover);const sched=new Date(p.date).getTime()>now();
-    return `<a class="book" href="#p-${esc(p.slug)}" draggable="false" style="--i:${i+(own?1:0)}" aria-label="${esc(p.title)}${p.pinned?" (pinned)":""}">${own?`<span class="btools2"><button type="button" class="pinbtn${p.pinned?" on":""}" data-act="pin" data-id="${p.id}" aria-pressed="${!!p.pinned}">${p.pinned?"Pinned":"Pin"}</button><button type="button" class="pinbtn" data-act="cover" data-id="${p.id}">Image</button></span>`:""}<span class="bt">${p.pinned?PIN:""}${esc(p.title)}${sched?" (scheduled)":""}</span><span class="bc">${cov?`<img src="${esc(cov)}" alt="" draggable="false">`:""}</span></a>`;}).join("");
+    return `<a class="book" href="#p-${esc(p.slug)}" draggable="false" style="--i:${i+(own?1:0)}" aria-label="${esc(p.title)}${p.pinned?" (pinned)":""}">${own?`<span class="btools2"><button type="button" class="pinbtn${p.pinned?" on":""}" data-act="pin" data-id="${p.id}" aria-pressed="${!!p.pinned}">${p.pinned?"Pinned":"Pin"}</button><button type="button" class="pinbtn" data-act="cover" data-id="${p.id}">Image</button><button type="button" class="pinbtn" data-act="mv-post" data-id="${p.id}" data-d="-1" title="Move left">←</button><button type="button" class="pinbtn" data-act="mv-post" data-id="${p.id}" data-d="1" title="Move right">→</button></span>`:""}<span class="bt">${p.pinned?PIN:""}${esc(p.title)}${sched?" (scheduled)":""}</span><span class="bc">${cov?`<img src="${esc(cov)}" alt="" draggable="false">`:""}</span><span class="bs">${starsHTML(p.rating)}</span></a>`;}).join("");
   const add=own?`<button type="button" class="book addbook" style="--i:0" data-act="new-post" data-tab="${tab.id}"><span class="bt">+ New ${rev?"review":"post"}</span><span class="bc">+</span></button>`:"";
   return `<section class="gal" aria-label="${esc(tab.name)}">${ps.length||own?`<div class="gal-vp" tabindex="0" data-gal="${tab.id}" aria-label="${esc(tab.name)}: drag, scroll or use arrow keys to browse"><div class="gal-tr">${add}${items}</div></div>
    <div class="gal-ft"><span class="tab">${ps.length} ${ps.length===1?noun[0]:noun[1]} · DRAG TO BROWSE</span><span class="arr"><button type="button" data-gnav="-1" aria-label="Show newer">←</button><button type="button" data-gnav="1" aria-label="Show older">→</button></span></div>`:`<p class="gal-empty">Nothing here yet.</p>`}</section>`;
@@ -1025,6 +1138,9 @@ function commentsHTML(p){
   const form=!allowed?`<p style="color:var(--muted)">Comments are open to subscribers. Subscribe below to join in.</p>`:`<form class="cform" data-form="comment" data-id="${p.id}"><label for="c-name" class="eyebrow">Leave a comment</label><input id="c-name" class="cname" type="text" maxlength="60" placeholder="Your name" autocomplete="name" value="${esc(ls.get("sn-name")||"")}"><input id="c-hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;opacity:0"><textarea id="c-text" maxlength="2000" placeholder="Write a comment…"></textarea><div class="cnote">Comments appear after the author approves them.</div><div><button class="btn sm primary" type="submit">Post comment</button></div></form>`;
   return `<section class="comments" id="comments"><h3>Discussion</h3>${form}<div id="clist">${list.length?list.map(c=>`<div class="cmt"><span class="av">${esc(initials(c.name))}</span><div style="min-width:0"><span class="who">${esc(c.name)}</span><span class="when">${esc(ago(c.at))}</span><p>${esc(c.body)}</p>${ED()?`<div class="acts"><button class="btn xs ghost" data-act="del-comment" data-cid="${esc(c.id)}">Delete</button></div>`:""}</div></div>`).join(""):`<p style="color:var(--muted)">No comments yet.</p>`}</div></section>`;
 }
+function withRating(html,p){const st=starsHTML(p.rating,"");if(!st)return html;const box=`<div class="rating">${st}</div>`;
+  const m=/^\s*(?:<p>\s*(?:<br>)?\s*<\/p>\s*)*<figure class="w-img"[\s\S]*?<\/figure>/.exec(html);
+  return m?html.slice(0,m[0].length)+box+html.slice(m[0].length):box+html;}
 function postView(p,preview,inReader){
   const tab=V().tabs.find(t=>t.id===p.tabId)||V().tabs[0];const ps=sortedPosts(tab);const i=ps.indexOf(p);const newer=ps[i-1],older=ps[i+1];
   const author=p.author||V().site.author;const cov=safeMedia(p.cover);const mins=Math.max(1,Math.round(words(p.html)/230));
@@ -1036,7 +1152,7 @@ function postView(p,preview,inReader){
    <div class="byline">${authorAv(author)}<span><b>${esc(author)}</b><br><span class="tab">${fmtDate(p.date)} · ${mins} MIN READ</span></span>${p.example?'<span class="badge">EXAMPLE</span>':""}${pt(p)>now()?'<span class="badge sched">SCHEDULED</span>':""}</div>
    ${preview?"":socialBar(p)}
    ${ED()&&!preview&&!L?`<div class="owner-row"><button class="btn sm" data-act="edit-post" data-id="${p.id}">Edit post</button><button class="btn sm" data-act="cover" data-id="${p.id}">Change image</button><span data-delwrap><button class="btn sm danger" data-act="ask-del" data-id="${p.id}">Delete</button></span></div>`:""}
-   <div class="prose" id="pbody" style="margin-top:30px">${clean(body)}</div>${gate}
+   <div class="prose" id="pbody" style="margin-top:30px">${withRating(clean(body),p)}</div>${gate}
    ${(p.tags||[]).length?`<div class="tags">${p.tags.map(t=>`<span class="chip">#${esc(t)}</span>`).join("")}</div>`:""}
    ${preview?"":(C.subscribed?"":`<div class="subcta"><h3>Get new posts</h3><p style="margin:0;color:var(--muted)">Subscribe to ${esc(V().site.title)}.</p><form class="subbox" data-form="sub"><label for="s-email" style="position:absolute;left:-9999px">Email</label><input id="s-email" type="email" placeholder="Type your email…"><button type="submit">Subscribe</button></form><div class="submsg" id="s-msg" role="status"></div></div>`)}
    ${preview?"":`<div id="cwrap">${commentsHTML(p)}</div>`}
@@ -1122,6 +1238,7 @@ site.addEventListener("focusout",e=>{const el=e.target.closest("[data-bind]");if
 site.addEventListener("change",e=>{if(!L)return;const t=curTab();t.bg=t.bg||{type:"plain",image:"",dim:.45,grass:true};
   if(e.target.id==="te-layout"){t.layout=e.target.value;render();}
   if(e.target.id==="te-title"){t.showTitle=e.target.checked;render();}
+  if(e.target.id==="te-posts"){t.noPosts=!e.target.checked;render();}
   if(e.target.id==="te-bg"){t.bg.type=e.target.value;render();if(t.bg.type==="image"&&!t.bg.image)toast("Use Upload image to choose the picture.");}
   if(e.target.id==="te-met"){t.bg.meteors=e.target.checked;render();}
   if(e.target.id==="te-cur"){t.cursor=e.target.checked?"shadow":"";render();}
@@ -1147,14 +1264,14 @@ function bgDialog(){
       if(e.target.closest("[data-bgup]")){const v={type:$("#dlg-type").value,dim:Number($("#dlg-dim").value),grass:$("#dlg-grass").checked,meteors:$("#dlg-met").checked};const [f]=await pickFiles("image/*");const u=await upload(f);Object.assign(bg,v);if(u){bg.image=u;bg.type="image";}d.close();draw();}});
   };draw();
 }
-function blockOpts(b){if(b.type==="portrait"){portraitOpts(b);return;}if(b.type==="carousel"){carouselOpts(b);return;}
+function blockOpts(b){if(b.type==="portrait"){portraitOpts(b);return;}if(b.type==="resume"){resumeOpts(b);return;}if(b.type==="carousel"){carouselOpts(b);return;}
   const F={heading:[{k:"size",l:"Size",t:"select",o:[["l","Large"],["s","Small"]],v:b.size||"l"}],text:[{k:"html",l:"Text",t:"textarea",v:textOf(b.html),h:"Or click the text on the page to edit it directly."}],image:[{k:"width",l:"Width",t:"select",o:[["full","Full"],["wide","Wide"],["narrow","Narrow"]],v:b.width||"full"},{k:"alt",l:"Alt text",v:b.alt||""},{k:"caption",l:"Caption",v:b.caption||""}],imagetext:[{k:"side",l:"Image side",t:"select",o:[["left","Left"],["right","Right"]],v:b.side||"left"},{k:"alt",l:"Alt text",v:b.alt||""}],button:[{k:"label",l:"Label",v:b.label||""},{k:"href",l:"Link",t:"url",v:b.href||"",ph:"https://… or #t-projects"}],spacer:[{k:"h",l:"Height (px)",t:"range",min:10,max:200,step:10,v:b.h||40}],portrait:[{k:"aff",l:"Schools / places beside the portrait",t:"textarea",v:b.aff||"",h:"One per line: Name | City, Country. Half go on the left, half on the right."}]}[b.type]||[];
   dialog({title:"Block options",fields:F,onOk:v=>{if(b.type==="text")v.html=esc(v.html).split(/\n{2,}/).map(p=>`<p>${p.replace(/\n/g,"<br>")}</p>`).join("");Object.assign(b,v);render();}});
 }
 
 /* ---------- post editor ---------- */
 let E=null; /* {post, isNew, saveT, status} */
-function newPost(tabId){return {id:uid("p"),tabId:tabId||curTab().id,slug:"",title:"",subtitle:"",date:"",author:"",cover:"",tags:[],audience:"everyone",comments:"everyone",seoTitle:"",seoDesc:"",html:"<p></p>",order:999};}
+function newPost(tabId){const want=S.tabs.find(t=>t.id===(tabId||curTab().id));if(!want||want.noPosts){const ok=S.tabs.find(t=>!t.noPosts);tabId=ok?ok.id:tabId;}return {id:uid("p"),tabId:tabId||curTab().id,slug:"",title:"",subtitle:"",date:"",author:"",cover:"",tags:[],audience:"everyone",comments:"everyone",seoTitle:"",seoDesc:"",html:"<p></p>",order:999};}
 function openEditor(post,isNew){
   E={post:clone(post),isNew,status:isNew?"New draft":"Editing published post"};delete E.post.example;
   const root=$("#editor-root");document.body.classList.add("noscroll");
@@ -1272,13 +1389,14 @@ function figureDialog(fig){const img=$("img",fig);const gal=fig.classList.contai
   d.root.addEventListener("click",e=>{const b=e.target.closest("[data-d]");if(e.target.id==="dlg"||(b&&b.dataset.d==="cancel")){fig.dataset.w=w0;fig.dataset.al=a0;if(m0==="inline")delete fig.dataset.mode;else fig.dataset.mode=m0;if(x0!==undefined)fig.dataset.x=x0;if(y0!==undefined)fig.dataset.y=y0;sizeFig(fig);fitFree($("#ed"));}});}
 function settingsDrawer(){
   readEditor();const p=E.post;$(".drawer")&&$(".drawer").remove();
-  const tabs=S.tabs.map(t=>`<option value="${t.id}"${t.id===p.tabId?" selected":""}>${esc(t.name)}</option>`).join("");
+  const tabs=S.tabs.filter(t=>!t.noPosts||t.id===p.tabId).map(t=>`<option value="${t.id}"${t.id===p.tabId?" selected":""}>${esc(t.name)}</option>`).join("");
   const dl=p.date?p.date.slice(0,16):"";const cov=safeMedia(p.cover);
   const d=document.createElement("aside");d.className="drawer";d.setAttribute("aria-label","Post settings");
   d.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center"><h3>Post settings</h3><button class="btn xs ghost" data-s="close">Close</button></div>
    <div class="f"><label for="s-tab">Tab</label><select id="s-tab">${tabs}</select></div>
    <div class="f"><label>Post colors</label><div class="row"><label class="row" style="font-size:13px" for="s-bg">Background <input type="color" id="s-bg" value="${hexOk(p.bg)||sitePaper().bg}"></label><label class="row" style="font-size:13px" for="s-ink">Text <input type="color" id="s-ink" value="${hexOk(p.ink)||sitePaper().ink}"></label><button class="btn xs ghost" data-s="colreset">Reset</button></div><span class="h">Defaults match your Substack: pale periwinkle with slate-blue text.</span></div>
    <div class="f"><label>Cover image</label><div class="row">${cov?`<img class="thumbprev" src="${esc(cov)}" alt="">`:`<div class="thumbprev sq gen" style="font-size:10px"></div>`}<button class="btn xs" data-s="cover">Upload</button>${cov?'<button class="btn xs ghost" data-s="nocover">Remove</button>':""}</div><span class="h">Shown as the book cover in the gallery, the square on card tabs, and at the top of the post.</span></div>
+   <div class="f"><label for="s-rating">Rating (book reviews)</label><select id="s-rating"><option value="0">No rating</option>${[5,4.5,4,3.5,3,2.5,2,1.5,1,.5].map(r=>`<option value="${r}"${Number(p.rating)===r?" selected":""}>${"★".repeat(Math.floor(r))}${r%1?"½":""}  ${r} / 5</option>`).join("")}</select><span class="h">Gold stars show under the book cover and in the post.</span></div>
    <div class="f"><label class="row" style="font-size:14px;text-transform:none;letter-spacing:0;font-family:var(--sans);color:var(--body)"><input type="checkbox" id="s-pin"${p.pinned?" checked":""}> Pin to the front of its tab</label></div>
    <div class="f"><label for="s-slug">URL</label><input id="s-slug" type="text" value="${esc(p.slug||slugify(p.title))}"><span class="h">#p-${esc(p.slug||slugify(p.title))}</span></div>
    <div class="f"><label for="s-tags">Tags</label><input id="s-tags" type="text" value="${esc((p.tags||[]).join(", "))}" placeholder="sci-fi, favorites"></div>
@@ -1291,7 +1409,7 @@ function settingsDrawer(){
    <div class="f"><label>Search preview</label><div class="seo"><span class="u">${esc(S.site.title)} › ${esc(p.slug||slugify(p.title))}</span><span class="t" id="seo-t">${esc(p.seoTitle||p.title||"Untitled")}</span><span class="d" id="seo-d">${esc(p.seoDesc||p.subtitle||"")}</span></div></div>
    <button class="btn primary" data-s="done" style="width:100%">Done</button>`;
   document.body.appendChild(d);
-  const read=()=>{p.tabId=$("#s-tab").value;p.slug=slugify($("#s-slug").value||p.title);p.tags=$("#s-tags").value.split(",").map(s=>s.trim()).filter(Boolean);p.author=$("#s-author").value.trim();p.date=$("#s-date").value;p.audience=$('input[name="aud"]:checked').value;p.comments=$('input[name="cm"]:checked').value;p.seoTitle=$("#s-seot").value;p.pinned=$("#s-pin").checked;const cb=$("#s-bg").value,ci=$("#s-ink").value;p.bg=cb===sitePaper().bg?"":cb;p.ink=ci===sitePaper().ink?"":ci;const edr=$("#editor");if(edr)edr.setAttribute("style",postVars(p));p.seoDesc=$("#s-seod").value;$("#seo-t").textContent=p.seoTitle||p.title||"Untitled";$("#seo-d").textContent=p.seoDesc||p.subtitle||"";};
+  const read=()=>{p.tabId=$("#s-tab").value;p.slug=slugify($("#s-slug").value||p.title);p.tags=$("#s-tags").value.split(",").map(s=>s.trim()).filter(Boolean);p.author=$("#s-author").value.trim();p.date=$("#s-date").value;p.audience=$('input[name="aud"]:checked').value;p.comments=$('input[name="cm"]:checked').value;p.seoTitle=$("#s-seot").value;p.pinned=$("#s-pin").checked;{const rt=Number($("#s-rating").value)||0;if(rt>0)p.rating=rt;else delete p.rating;}const cb=$("#s-bg").value,ci=$("#s-ink").value;p.bg=cb===sitePaper().bg?"":cb;p.ink=ci===sitePaper().ink?"":ci;const edr=$("#editor");if(edr)edr.setAttribute("style",postVars(p));p.seoDesc=$("#s-seod").value;$("#seo-t").textContent=p.seoTitle||p.title||"Untitled";$("#seo-d").textContent=p.seoDesc||p.subtitle||"";};
   d.addEventListener("input",()=>{read();scheduleSave();});d.addEventListener("change",()=>{read();scheduleSave();});
   d.addEventListener("click",async e=>{const b=e.target.closest("[data-s]");if(!b)return;const s=b.dataset.s;
     if(s==="close"||s==="done"){read();d.remove();scheduleSave();}
@@ -1370,14 +1488,19 @@ document.addEventListener("click",async e=>{
   else if(a==="tab-mv"){const t=curTab(),i=L.tabs.indexOf(t),j=i+Number(b.dataset.d);if(j<0||j>=L.tabs.length)return;L.tabs.splice(i,1);L.tabs.splice(j,0,t);render();}
   else if(a==="tab-add"){dialog({title:"New tab",fields:[{k:"n",l:"Tab name",v:""}],ok:"Add tab",onOk:v=>{const n=v.n.trim();if(!n)return "Name the tab.";const t={id:uid("t"),name:n,slug:uniqueSlug(slugify(n),L.tabs,null),cols:3,sort:"date",layout:"grid",showTitle:true,bg:{type:"paper",image:"",dim:.45,grass:true},blocks:[]};L.tabs.push(t);location.hash="t-"+t.slug;render();}});}
   else if(a==="tab-del"){const t=curTab();if(L.tabs.length<2){toast("Keep at least one tab.");return;}const n=L.posts.filter(p=>p.tabId===t.id).length;dialog({title:`Delete “${t.name}”?`,extra:`<p style="color:var(--body);margin:0 0 14px">${n?`Its ${n} post${n>1?"s":""} will move to “${L.tabs.find(x=>x!==t).name}”.`:"It has no posts."} Nothing is removed for visitors until you publish.</p>`,ok:"Delete tab",onOk:()=>{const to=L.tabs.find(x=>x!==t);L.posts.forEach(p=>{if(p.tabId===t.id)p.tabId=to.id;});L.tabs=L.tabs.filter(x=>x!==t);location.hash="t-"+to.slug;render();}});}
-  else if(a==="blk-add"){const t=curTab();const ty=b.dataset.type;const blk={id:uid("b"),type:ty,...({heading:{text:"New heading",size:"l"},text:{html:"<p>Write something here.</p>"},image:{src:"",caption:"",width:"full"},imagetext:{src:"",html:"<p>Write something next to the image.</p>",side:"left"},button:{label:"Learn more",href:""},spacer:{h:40},portrait:{},carousel:{items:[],h:300,speed:40}}[ty]||{})};t.blocks=t.blocks||[];t.blocks.push(blk);render();if(ty==="image"||ty==="imagetext"||ty==="button")blockAfterAdd(blk);}
+  else if(a==="blk-add"){const t=curTab();const ty=b.dataset.type;const blk={id:uid("b"),type:ty,...({heading:{text:"New heading",size:"l"},text:{html:"<p>Write something here.</p>"},image:{src:"",caption:"",width:"full"},imagetext:{src:"",html:"<p>Write something next to the image.</p>",side:"left"},button:{label:"Learn more",href:""},spacer:{h:40},portrait:{},carousel:{items:[],h:300,speed:40},resume:{sections:[{id:uid("rs"),title:"Experience",kind:"work",show:3,entries:[]},{id:uid("rs"),title:"Projects",kind:"project",show:3,entries:[]}]}}[ty]||{})};t.blocks=t.blocks||[];t.blocks.push(blk);render();if(ty==="image"||ty==="imagetext"||ty==="button")blockAfterAdd(blk);if(ty==="resume")resumeOpts(blk);}
   else if(a==="blk-up"||a==="blk-down"){const fb=findBlock(b.dataset.id);const j=fb.i+(a==="blk-up"?-1:1);if(j<0||j>=fb.t.blocks.length)return;fb.t.blocks.splice(fb.i,1);fb.t.blocks.splice(j,0,fb.b);render();}
   else if(a==="blk-del"){const fb=findBlock(b.dataset.id);fb.t.blocks.splice(fb.i,1);render();}
   else if(a==="blk-opts"){blockOpts(findBlock(b.dataset.id).b);}
   else if(a==="tab-bg-up"){const t=curTab();const [f]=await pickFiles("image/*");const u=await upload(f);if(u){t.bg=t.bg||{};t.bg.type="image";t.bg.image=u;t.bg.dim=t.bg.dim??.45;render();}}
   else if(a==="blk-car"){const fb=findBlock(b.dataset.id);const fs=await pickFiles("image/*",true);if(!fs.length)return;fb.b.items=fb.b.items||[];for(const f of fs.slice(0,20)){const u=await upload(f);if(u)fb.b.items.push({src:u,s:100});}render();}
   else if(a==="blk-img"){const fb=findBlock(b.dataset.id);const [f]=await pickFiles("image/*");const u=await upload(f);if(u){fb.b.src=u;render();}}
-  else if(a==="mv-post"){e.preventDefault();const t=curTab();const ps=L.posts.filter(p=>p.tabId===t.id).sort((x,y)=>(x.order??0)-(y.order??0));const i=ps.findIndex(p=>p.id===b.dataset.id),j=i+Number(b.dataset.d);if(j<0||j>=ps.length)return;[ps[i],ps[j]]=[ps[j],ps[i]];ps.forEach((p,k)=>p.order=k);render();}
+  else if(a==="mv-post"){e.preventDefault();e.stopPropagation();const tgt=L||clone(S);const t=tgt.tabs.find(x=>x.id===curTab().id);const gal=["gallery","album","awards"].includes(t.layout);
+    const byDate=(x,y)=>String(y.date).localeCompare(String(x.date));
+    let seq=tgt.posts.filter(p=>p.tabId===t.id).sort(t.sort==="manual"?(x,y)=>(x.order??0)-(y.order??0):byDate);
+    const i=seq.findIndex(p=>p.id===b.dataset.id),j=i+Number(b.dataset.d);if(i<0||j<0||j>=seq.length)return;
+    [seq[i],seq[j]]=[seq[j],seq[i]];seq.forEach((p,k)=>p.order=k);t.sort="manual";
+    if(L)render();else publishState(tgt,"Saving the new order…");}
   else if(a==="edit-toggle"){editMode=!editMode;try{localStorage.setItem("gh-edit",editMode?"1":"0");}catch(_){}render();toast(editMode?"Editing on. Visitors never see these controls.":"Viewing the site as visitors see it.",3000);}
   else if(a==="cover"){e.preventDefault();e.stopPropagation();const id=b.dataset.id;const [f]=await pickFiles("image/*");const u=await upload(f);if(!u)return;const next=clone(S);const q=next.posts.find(x=>x.id===id);if(!q)return;q.cover=u;publishState(next,"Updating image…");}
   else if(a==="tile"){e.preventDefault();tileDialog(b.dataset.id);}
