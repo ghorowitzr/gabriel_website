@@ -346,7 +346,7 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:400;margin:0;text-wrap:balanc
 .rs-meta{text-align:right;color:var(--muted);font-size:14px;line-height:1.55}.rs-meta p{margin:0}
 .rs-d{grid-column:2/-1;max-width:72ch;margin-top:4px;color:var(--body);font-size:15.5px;line-height:1.65}
 .rs-e.nologo .rs-d{grid-column:1/-1}
-.rs-d p{margin:0 0 12px}.rs-d p:last-child{margin:0}
+.rs-d p{margin:0 0 12px}.rs-d p:last-child{margin:0}.rs-d ul{margin:0;padding:0 0 0 1.1em;display:grid;gap:7px}.rs-d li::marker{color:var(--muted)}
 .rs-d a,.rs-pc .rs-pd a{color:var(--fg);text-underline-offset:4px}
 .rs-p{display:grid;grid-template-columns:.95fr 1.05fr;gap:40px;align-items:center}
 .rs-p.noimg{grid-template-columns:minmax(0,1fr)}
@@ -829,7 +829,10 @@ function cardHTML(p,i,tab){
 }
 const starsHTML=(r,cls)=>{r=Math.round(Number(r)*2)/2;return r>0?`<span class="stars${cls?" "+cls:""}" style="--r:${Math.min(5,r)}" role="img" aria-label="${Math.min(5,r)} out of 5 stars"></span>`:"";};
 const rsLink=u=>/^https?:\/\//i.test(String(u||"").trim())?String(u).trim():"";
-const rsText=t=>String(t||"").split(/\n\s*\n/).map(x=>x.trim()).filter(Boolean).map(x=>"<p>"+esc(x).replace(/\n/g,"<br>").replace(/(https?:\/\/[^\s<]+[^\s<.,;:!?)])/g,'<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>')+"</p>").join("");
+const rsInline=x=>esc(x).replace(/(https?:\/\/[^\s<]+[^\s<.,;:!?)])/g,'<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+const rsText=t=>String(t||"").split(/\n\s*\n/).map(x=>x.trim()).filter(Boolean).map(x=>{const ls=x.split("\n").map(l=>l.trim()).filter(Boolean);
+  if(ls.every(l=>/^[-•]\s+/.test(l)))return "<ul>"+ls.map(l=>"<li>"+rsInline(l.replace(/^[-•]\s+/,""))+"</li>").join("")+"</ul>";
+  return "<p>"+rsInline(x).replace(/\n/g,"<br>")+"</p>";}).join("");
 function rsEntry(k,e){
   if(k==="project"){const im=safeMedia(e.image),u=rsLink(e.url),links=(e.links||[]).map(l=>({l:String(l.l||"").trim(),u:rsLink(l.u)})).filter(l=>l.u);
     const hl=String(e.hl||"").split("\n").map(x=>x.trim()).filter(Boolean);
@@ -1488,7 +1491,7 @@ document.addEventListener("click",async e=>{
   else if(a==="tab-mv"){const t=curTab(),i=L.tabs.indexOf(t),j=i+Number(b.dataset.d);if(j<0||j>=L.tabs.length)return;L.tabs.splice(i,1);L.tabs.splice(j,0,t);render();}
   else if(a==="tab-add"){dialog({title:"New tab",fields:[{k:"n",l:"Tab name",v:""}],ok:"Add tab",onOk:v=>{const n=v.n.trim();if(!n)return "Name the tab.";const t={id:uid("t"),name:n,slug:uniqueSlug(slugify(n),L.tabs,null),cols:3,sort:"date",layout:"grid",showTitle:true,bg:{type:"paper",image:"",dim:.45,grass:true},blocks:[]};L.tabs.push(t);location.hash="t-"+t.slug;render();}});}
   else if(a==="tab-del"){const t=curTab();if(L.tabs.length<2){toast("Keep at least one tab.");return;}const n=L.posts.filter(p=>p.tabId===t.id).length;dialog({title:`Delete “${t.name}”?`,extra:`<p style="color:var(--body);margin:0 0 14px">${n?`Its ${n} post${n>1?"s":""} will move to “${L.tabs.find(x=>x!==t).name}”.`:"It has no posts."} Nothing is removed for visitors until you publish.</p>`,ok:"Delete tab",onOk:()=>{const to=L.tabs.find(x=>x!==t);L.posts.forEach(p=>{if(p.tabId===t.id)p.tabId=to.id;});L.tabs=L.tabs.filter(x=>x!==t);location.hash="t-"+to.slug;render();}});}
-  else if(a==="blk-add"){const t=curTab();const ty=b.dataset.type;const blk={id:uid("b"),type:ty,...({heading:{text:"New heading",size:"l"},text:{html:"<p>Write something here.</p>"},image:{src:"",caption:"",width:"full"},imagetext:{src:"",html:"<p>Write something next to the image.</p>",side:"left"},button:{label:"Learn more",href:""},spacer:{h:40},portrait:{},carousel:{items:[],h:300,speed:40},resume:{sections:[{id:uid("rs"),title:"Experience",kind:"work",show:3,entries:[]},{id:uid("rs"),title:"Projects",kind:"project",show:3,entries:[]}]}}[ty]||{})};t.blocks=t.blocks||[];t.blocks.push(blk);render();if(ty==="image"||ty==="imagetext"||ty==="button")blockAfterAdd(blk);if(ty==="resume")resumeOpts(blk);}
+  else if(a==="blk-add"){const t=curTab();const ty=b.dataset.type;const blk={id:uid("b"),type:ty,...({heading:{text:"New heading",size:"l"},text:{html:"<p>Write something here.</p>"},image:{src:"",caption:"",width:"full"},imagetext:{src:"",html:"<p>Write something next to the image.</p>",side:"left"},button:{label:"Learn more",href:""},spacer:{h:40},portrait:{},carousel:{items:[],h:300,speed:40},resume:{sections:[{id:uid("rs"),title:"Experience",kind:"work",show:3,entries:[]},{id:uid("rs"),title:"Education",kind:"work",show:3,entries:[]}]}}[ty]||{})};t.blocks=t.blocks||[];t.blocks.push(blk);render();if(ty==="image"||ty==="imagetext"||ty==="button")blockAfterAdd(blk);if(ty==="resume")resumeOpts(blk);}
   else if(a==="blk-up"||a==="blk-down"){const fb=findBlock(b.dataset.id);const j=fb.i+(a==="blk-up"?-1:1);if(j<0||j>=fb.t.blocks.length)return;fb.t.blocks.splice(fb.i,1);fb.t.blocks.splice(j,0,fb.b);render();}
   else if(a==="blk-del"){const fb=findBlock(b.dataset.id);fb.t.blocks.splice(fb.i,1);render();}
   else if(a==="blk-opts"){blockOpts(findBlock(b.dataset.id).b);}

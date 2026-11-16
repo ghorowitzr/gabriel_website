@@ -71,6 +71,37 @@ const MIGRATIONS = [
       }
     }
   }],
+  ["migration:2026-11-15-cv", (next) => {
+    // Resume built from Gabriel's CV (no projects section: that's what the Projects tab is for).
+    const me = (next.tabs || []).find((t) => t.slug === "gabriel");
+    const rb = me && (me.blocks || []).find((b) => b.type === "resume");
+    if (!rb) return;
+    const id = () => Math.random().toString(36).slice(2, 8);
+    const E = (o) => ({ id: "re-" + id(), ...o });
+    rb.sections = [
+      { id: "rs-" + id(), title: "Experience", kind: "work", show: 3, entries: [
+        E({ org: "Ithildin", role: "Strategic Finance Intern", dates: "Feb 2026 – Dec 2026", loc: "San Francisco, CA", desc:
+          "- Developed investor-ready financial sheets to clearly communicate unit economics and growth metrics to stakeholders.\n- Designed and implemented AI-driven operational workflows that reduced task-delegation overhead across a 10+ person intern team, improving throughput and accountability within the SkyDeck ecosystem.\n- Led cross-functional operations across product, marketing, and business development workstreams, coordinating deliverables and aligning stakeholders on milestones and KPIs.\n- Developed and iterated on go-to-market strategy for an early-stage venture, applying structured market sizing." }),
+        E({ org: "Cemex", role: "HRD Intern", dates: "Jun 2025 – Jul 2025", loc: "San Pedro Garza García, México", desc:
+          "- Researched and developed comprehensive benchmarks for HR management and talent evaluation, producing structured frameworks.\n- Analyzed machine learning approaches (Random Forest, Gradient Boosting) for talent assessment, translating algorithmic outputs into business-relevant recommendations for senior HR leadership." }),
+        E({ org: "Cemex Mexico", role: "Strategic Planning Intern", dates: "Jan 2024 – Feb 2024", loc: "Monterrey, México", desc:
+          "- Built data visualizations and financial analyses comparing performance across regional manufacturing plants." }),
+      ] },
+      { id: "rs-" + id(), title: "Education", kind: "work", show: 3, entries: [
+        E({ org: "University of California, Berkeley", role: "BHGAP | SCET | BISP programs", note: "Innovator in Residence (IIR), Innovis VC", dates: "Jan 2025 – Jan 2027", loc: "Berkeley, CA", desc:
+          "- Completed rigorous MBA and undergraduate coursework in Product Management, Technology Entrepreneurship, and Challenge Labs.\n- Earned second place in the Collider Cup XVII, UC Berkeley's premier startup pitch competition, demonstrating structured problem-solving and persuasive communication under pressure.\n- Senior Advisor/Senior Columnist, Berkeley Business Review: authored economics and AI analyses for a student readership of thousands." }),
+        E({ org: "Tecnológico de Monterrey", role: "Bachelor in Global Business (BGB)", dates: "Feb 2022 – Jun 2027", loc: "Monterrey, México", desc:
+          "- GPA: 95/100, top academic standing across a 4-year program spanning finance, strategy, and international markets.\n- Relevant coursework: Financial Management, Investment Project Evaluation, Business Model Innovation, International Competitiveness, Financial Planning Strategy, Global Business Trends & Risk Detection, Statistics for Business.\n- TOEFL: 117/120. Executive Committee member, Student Government (FETEC 2023)." }),
+        E({ org: "Università Cattolica del Sacro Cuore", role: "International Concentration, Business & Management", dates: "Sep 2025 – Dec 2025", loc: "Milan, Italy", desc:
+          "- Coursework in Business Government & Global Economy, Strategic Management, Business Ethics, and Economics of European Integration, building a cross-regional policy and strategy perspective." }),
+      ] },
+      { id: "rs-" + id(), title: "Skills", kind: "work", show: 0, entries: [
+        E({ org: "Languages", desc: "English (Native), Spanish (Native), Italian (Intermediate Working Proficiency)" }),
+        E({ org: "Analytics & Tools", desc: "Advanced Excel/PowerPoint, Data Visualization, Statistical Analysis, Financial Modeling" }),
+        E({ org: "AI & Automation", desc: "Claude, Codex, Clay (Data Enrichment), Zapier, Perplexity, Microsoft Copilot" }),
+      ] },
+    ];
+  }],
 ];
 let migrationsDone = false;
 async function runMigrations(env, site, version) {
